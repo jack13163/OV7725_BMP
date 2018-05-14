@@ -7,6 +7,7 @@
 #include "key.h"
 #include "exti.h"
 #include "led.h"
+#include "imageprocess.h"
 
 extern u8 ov_sta;	//在exit.c里面定义
 extern u16 USART2_RX_STA;//在usart.c中定义

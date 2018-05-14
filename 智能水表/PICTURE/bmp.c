@@ -1,6 +1,7 @@
 #include "piclib.h"
 #include "bmp.h"
 #include "string.h"
+#include "stdio.h"
 
 //********************************************************************************
 //升级说明
@@ -358,9 +359,27 @@ u8 minibmp_decode(u8 *filename,u16 x,u16 y,u16 width,u16 height,u16 acolor,u8 mo
 	return res;
 }            
 
+/* 打印位图文件头信息
+*/
+void printfBmpFileInfo(BITMAPFILEHEADER fileInfo)
+{
+	printf("位图的文件信息如下：\r\n");
+	printf("文件大小：%d\r\n", fileInfo.bfSize);
+	printf("像素数据偏移量：%d\r\n", fileInfo.bfOffBits);
+}
 
-
-
+/* 打印位图信息
+*/
+void printfBmpInfo(BITMAPINFOHEADER bmpInfo)
+{
+	printf("位图的信息如下：\r\n");
+	printf("信息头所占字节大小：%d\r\n", bmpInfo.biSize);
+	printf("位图宽度：%ld\r\n", bmpInfo.biWidth);
+	printf("位图高度：%ld\r\n", bmpInfo.biHeight);
+	printf("每像素所占字节数：%d\r\n", bmpInfo.biBitCount);
+	printf("像素数据的压缩类型：%d\r\n", bmpInfo.biCompression);
+	printf("位图像素数据所占的字节数：%d\r\n", bmpInfo.biSizeImage);	
+}
 
 
 

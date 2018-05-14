@@ -1,17 +1,18 @@
 #include "ff.h"
 #include "bmp.h"
 #include "math.h"
+#include "stdio.h"
+#include "imageprocess.h"
 
 //常用颜色定义
 #define BLACK 0x0000
 #define WHITE 0xFFFF
 
 //文件指针（一定要定义在外部，否则可能出现堆栈溢出后果，程序死掉）
-FIL f1, f2, f3, f4, f5, f6, f7, f8, f9, f10;
+FIL f1, f2, f3, f4, f5, f6, f7, f8;
 BITMAPINFO bmp;
 
-//图像灰度化
-/*
+/* 图像灰度化
  * 思路：定义两个文件指针，
  * 第一个文件指针用于读取原图像中的像素值，
  * 第二个用来指向待写入的文件
@@ -66,7 +67,7 @@ void Graying(const TCHAR* src, const TCHAR* dist)
  * 思路：定义两个文件指针，
  * 第一个文件指针用于读取原图像中的像素值，
  * 第二个用来指向待写入的文件
-* f3:数据文件
+ * f3:数据文件
  */
 void Ostu(const TCHAR* src, const TCHAR* dist)
 {
@@ -204,7 +205,7 @@ void readDouble(FIL *fp, double* ret)
 		}
 		
 		//换行符处理
-		if(s[0] == '\n')
+		if(s[0] == '\n' || s[0] == '\r')
 		{
 			continue;
 		}
@@ -301,7 +302,8 @@ void readDoubleRandom(FIL *fp, double* ret, int n)
 	readDouble(fp, ret);
 }
 
-//求e的m次方的值(m为绝对值0~1之间的数)
+/* 求e的m次方的值(m为绝对值0~1之间的数)
+*/
 double eC(double m)
 {
 	int i, j;
@@ -319,8 +321,7 @@ double eC(double m)
 	return d;
 }
 
-//BP神经网络识别数字
-/*
+/* BP神经网络识别数字
  * 思路：已知权值矩阵w、v，以及阀值矩阵b1、b2
  * 需要使用四个文件：
  *	第1个文件指针指向权值矩阵w
@@ -332,8 +333,8 @@ double eC(double m)
 u8 BP_Recongnization(const TCHAR* src)
 {
 	//文件打开标志
-	u8 res1, res2, res3, res4, res5, res6, res9, res10;
-	u16 color;
+	u8 res1, res2, res3, res4, res5, res6, res7, res8;
+	u8 rgb[3];
 	u8 gray;
 	double pMax;//最大的灰度值
 	double tmp;
@@ -346,12 +347,6 @@ u8 BP_Recongnization(const TCHAR* src)
 	double max;
 	int maxi = 0;
 	
-	inNum = 400;
-	outNum = 10;
-	t = sqrt(0.43*inNum*outNum + 0.12*outNum*outNum + 2.54*inNum + 0.77*outNum + 0.35) + 0.51;//由输入节点数和输出节点数计算得到
-	hideNum = (int)(t);
-	hideNum = (t - hideNum * 1.0) > 0.5 ? hideNum +1 : hideNum;
-	
 	//打开文件
 	do
 	{
@@ -359,43 +354,56 @@ u8 BP_Recongnization(const TCHAR* src)
 		res2 = f_open(&f2, "0:BP/v.txt", FA_READ);
 		res3 = f_open(&f3, "0:BP/b1.txt", FA_READ);
 		res4 = f_open(&f4, "0:BP/b2.txt", FA_READ);
-		res5 = f_open(&f5, "0:BP/x1.dat", FA_READ | FA_WRITE | FA_CREATE_ALWAYS);
-		res6 = f_open(&f6, "0:BP/x2.dat", FA_READ | FA_WRITE | FA_CREATE_ALWAYS);
-		res9 = f_open(&f9, src, FA_READ);
-		res10 = f_open(&f10, "0:BP/x.dat", FA_READ | FA_WRITE | FA_CREATE_ALWAYS);
-	}while((FR_OK != res1) || (FR_OK != res2) || (FR_OK != res3) || (FR_OK != res4) || (FR_OK != res5) || (FR_OK != res6) || (FR_OK != res9));
+		res5 = f_open(&f5, "0:BP/x1.dat", FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
+		res6 = f_open(&f6, "0:BP/x2.dat", FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
+		res7 = f_open(&f7, src, FA_READ);
+		res8 = f_open(&f8, "0:BP/x.dat", FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
+	}while((FR_OK != res1) || (FR_OK != res2) || (FR_OK != res3) || (FR_OK != res4) || (FR_OK != res5) || (FR_OK != res6) || (FR_OK != res7) || (FR_OK != res8));
 	//1.数据归一化
-	f_read(&f9, &bmp, sizeof(bmp), &num);
+	f_read(&f7, &bmp, sizeof(bmp), &num);
 	
 	height = bmp.bmiHeader.biHeight;
 	width = bmp.bmiHeader.biWidth;
+	inNum = height * width;
+	outNum = 10;
+	t = sqrt(0.43*inNum*outNum + 0.12*outNum*outNum + 2.54*inNum + 0.77*outNum + 0.35) + 0.51;//由输入节点数和输出节点数计算得到
+	hideNum = (int)(t);
+	hideNum = (t - hideNum * 1.0) > 0.5 ? hideNum +1 : hideNum;
 	
+	//打印位图信息
+	printfBmpFileInfo(bmp.bmfHeader);
+	printfBmpInfo(bmp.bmiHeader);
+	
+	//定位到位图数据区域
+	f_lseek(&f7, bmp.bmfHeader.bfOffBits);
 	//查找最大值
 	for(i = 0; i < width; i++)
 	{
 		for(j = 0; j < height; j++)
 		{
-			f_read(&f9, &color, sizeof(color), &num);
-			gray = color & 0X001F;
+			f_read(&f7, &rgb, sizeof(rgb), &num);//输入
+			gray = rgb[0];
 			if(gray > pMax)
 			{
 				pMax = gray;
 			}
 		}
 	}
+	
+	f_lseek(&f7, 0);
 	//利用最大值归一化，同时保存到一个临时的文件中
 	for(i = 0; i < width; i++)
 	{
 		for(j = 0; j < height; j++)
 		{
-			f_read(&f9, &color, sizeof(color), &num);//输入
-			gray = color & 0X001F;
+			f_read(&f7, &rgb, sizeof(rgb), &num);//输入
+			gray = rgb[0];
 			tmp = gray / pMax;
-			f_write(&f10, &tmp, sizeof(tmp), &num);//x
+			f_write(&f8, &tmp, sizeof(tmp), &num);//x
 		}
 	}
 	
-	f_lseek(&f10, 0);
+	f_lseek(&f8, 0);
 	//2.计算隐藏层的输入输出
 	for(i = 0; i < hideNum; i++)
 	{
@@ -404,7 +412,7 @@ u8 BP_Recongnization(const TCHAR* src)
 		{
 			//读取一个双精度浮点型数据
 			readDouble(&f1, &t1);//w
-			f_read(&f10, &t2, sizeof(t2), &num);//x
+			f_read(&f8, &t2, sizeof(t2), &num);//x
 			
 			tmp += t1 * t2;
 		}
@@ -453,10 +461,8 @@ u8 BP_Recongnization(const TCHAR* src)
 	f_close(&f4);
 	f_close(&f5);
 	f_close(&f6);
-	f_close(&f9);
-	f_close(&f10);
+	f_close(&f7);
+	f_close(&f8);
+	printf("-------------------------------------------------------------------------------------\r\n");
 	return maxi;
 }
-
-
-

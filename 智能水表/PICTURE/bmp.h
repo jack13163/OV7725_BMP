@@ -20,17 +20,17 @@
 //BMP信息头
 typedef __packed struct
 {
-    u32 biSize ;		   	//说明BITMAPINFOHEADER结构所需要的字数。
+    u32 biSize ;		   		//说明BITMAPINFOHEADER结构所需要的字数。
     long  biWidth ;		   	//说明图象的宽度，以象素为单位 
     long  biHeight ;	   	//说明图象的高度，以象素为单位 
     u16  biPlanes ;	   		//为目标设备说明位面数，其值将总是被设为1 
     u16  biBitCount ;	   	//说明比特数/象素，其值为1、4、8、16、24、或32
     u32 biCompression ;  	//说明图象数据压缩的类型。其值可以是下述值之一：
-	//BI_RGB：没有压缩；
-	//BI_RLE8：每个象素8比特的RLE压缩编码，压缩格式由2字节组成(重复象素计数和颜色索引)；  
+		//BI_RGB：没有压缩；
+		//BI_RLE8：每个象素8比特的RLE压缩编码，压缩格式由2字节组成(重复象素计数和颜色索引)；  
     //BI_RLE4：每个象素4比特的RLE压缩编码，压缩格式由2字节组成
   	//BI_BITFIELDS：每个象素的比特由指定的掩码决定。
-    u32 biSizeImage ;		//说明图象的大小，以字节为单位。当用BI_RGB格式时，可设置为0  
+    u32 biSizeImage ;			//说明图象的大小，以字节为单位。当用BI_RGB格式时，可设置为0  
     long  biXPelsPerMeter ;	//说明水平分辨率，用象素/米表示
     long  biYPelsPerMeter ;	//说明垂直分辨率，用象素/米表示
     u32 biClrUsed ;	  	 	//说明位图实际使用的彩色表中的颜色索引数
@@ -72,6 +72,13 @@ typedef RGBQUAD * LPRGBQUAD;//彩色表
 //BMP编解码函数
 u8 stdbmp_decode(const u8 *filename);
 u8 minibmp_decode(u8 *filename,u16 x,u16 y,u16 width,u16 height,u16 acolor,u8 mode);//尺寸小于240*320的bmp图片解码.
+/* 打印位图文件头信息
+*/
+void printfBmpFileInfo(BITMAPFILEHEADER fileInfo);
+
+/* 打印位图信息
+*/
+void printfBmpInfo(BITMAPINFOHEADER bmpInfo);
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #endif
 

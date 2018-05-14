@@ -18,3 +18,5 @@
 ..\obj\imageprocess.o: ..\STM32F10x_FWLib\inc\stm32f10x_usart.h
 ..\obj\imageprocess.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\obj\imageprocess.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+..\obj\imageprocess.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+..\obj\imageprocess.o: imageprocess.h
