@@ -45,14 +45,6 @@ typedef __packed struct
     u16  bfReserved2 ;//保留
     u32  bfOffBits ;  //从文件开始到位图数据(bitmap data)开始之间的的偏移量
 }BITMAPFILEHEADER ;
-//彩色表 
-typedef __packed struct 
-{
-    u8 rgbBlue ;    //指定蓝色强度
-    u8 rgbGreen ;	//指定绿色强度 
-    u8 rgbRed ;	  	//指定红色强度 
-    u8 rgbReserved ;//保留，设置为0 
-}RGBQUAD ;
 //位图信息头
 typedef __packed struct
 { 
@@ -60,7 +52,6 @@ typedef __packed struct
 	BITMAPINFOHEADER bmiHeader;  
 	u32 RGB_MASK[3];			//调色板用于存放RGB掩码.
 }BITMAPINFO; 
-typedef RGBQUAD * LPRGBQUAD;//彩色表  
 
 //图象数据压缩的类型
 #define BI_RGB	 		0  //没有压缩.RGB 5,5,5.

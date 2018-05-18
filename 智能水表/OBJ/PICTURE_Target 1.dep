@@ -1,5 +1,5 @@
 Dependencies for Project 'PICTURE', Target 'Target 1': (DO NOT MODIFY !)
-F (.\main.c)(0x5AF8FF0B)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE\TOUCH -I..\HARDWARE\REMOTE -I..\HARDWARE\ADXL345 -I..\HARDWARE\DS18B20 -I..\HARDWARE\NRF24L01 -I..\HARDWARE\SRAM -I..\MALLOC -I..\HARDWARE\SD -I..\FATFS\exfuns -I..\FATFS\src -I..\USMART -I..\FATFS\src\option -I..\TEXT -I..\PICTURE -I..\HARDWARE\OV7725 -I..\HARDWARE\EXTI-I C:\Users\Administrator\Desktop\OV7725_BMP\智能水表\USER\RTE-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I D:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
+F (.\main.c)(0x5AFE571A)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE\TOUCH -I..\HARDWARE\REMOTE -I..\HARDWARE\ADXL345 -I..\HARDWARE\DS18B20 -I..\HARDWARE\NRF24L01 -I..\HARDWARE\SRAM -I..\MALLOC -I..\HARDWARE\SD -I..\FATFS\exfuns -I..\FATFS\src -I..\USMART -I..\FATFS\src\option -I..\TEXT -I..\PICTURE -I..\HARDWARE\OV7725 -I..\HARDWARE\EXTI-I C:\Users\Administrator\Desktop\OV7725_BMP\智能水表\USER\RTE-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I D:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
 I (..\SYSTEM\delay\delay.h)(0x5513EB2F)
 I (..\SYSTEM\sys\sys.h)(0x5513EB2F)
 I (..\USER\stm32f10x.h)(0x4D783CB4)
@@ -16,7 +16,7 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
 I (..\HARDWARE\LCD\lcd.h)(0x5513EB2F)
 I (D:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5475F300)
-I (..\SYSTEM\usart\usart.h)(0x5AF5551B)
+I (..\SYSTEM\usart\usart.h)(0x5AFE46BE)
 I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5475F300)
 I (..\PICTURE\piclib.h)(0x5513EB2F)
 I (..\MALLOC\malloc.h)(0x5513E682)
@@ -24,7 +24,7 @@ I (..\FATFS\src\ff.h)(0x505BD406)
 I (..\FATFS\src\integer.h)(0x4BD31212)
 I (..\FATFS\src\ffconf.h)(0x50236DB2)
 I (..\FATFS\exfuns\exfuns.h)(0x503CCF24)
-I (..\PICTURE\bmp.h)(0x5AF939A2)
+I (..\PICTURE\bmp.h)(0x5AFD182F)
 I (..\PICTURE\tjpgd.h)(0x528F544A)
 I (..\PICTURE\integer.h)(0x4BD31212)
 I (..\PICTURE\gif.h)(0x5513EB30)
@@ -81,16 +81,16 @@ I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
 I (..\HARDWARE\LED\led.h)(0x5513EB2F)
 I (..\HARDWARE\KEY\key.h)(0x5AF13666)
 I (..\SYSTEM\delay\delay.h)(0x5513EB2F)
-I (..\SYSTEM\usart\usart.h)(0x5AF5551B)
+I (..\SYSTEM\usart\usart.h)(0x5AFE46BE)
 I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5475F300)
 I (..\HARDWARE\OV7725\OV7725.h)(0x5AD0952E)
 I (..\HARDWARE\OV7725\sccb.h)(0x5AC347DA)
 I (..\STM32F10x_FWLib\inc\stm32f10x_exti.h)(0x4D783BB4)
-F (.\imageprocess.c)(0x5AF93A13)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE\TOUCH -I..\HARDWARE\REMOTE -I..\HARDWARE\ADXL345 -I..\HARDWARE\DS18B20 -I..\HARDWARE\NRF24L01 -I..\HARDWARE\SRAM -I..\MALLOC -I..\HARDWARE\SD -I..\FATFS\exfuns -I..\FATFS\src -I..\USMART -I..\FATFS\src\option -I..\TEXT -I..\PICTURE -I..\HARDWARE\OV7725 -I..\HARDWARE\EXTI-I C:\Users\Administrator\Desktop\OV7725_BMP\智能水表\USER\RTE-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I D:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\imageprocess.o --omf_browse ..\obj\imageprocess.crf --depend ..\obj\imageprocess.d)
+F (.\imageprocess.c)(0x5AFE38BE)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE\TOUCH -I..\HARDWARE\REMOTE -I..\HARDWARE\ADXL345 -I..\HARDWARE\DS18B20 -I..\HARDWARE\NRF24L01 -I..\HARDWARE\SRAM -I..\MALLOC -I..\HARDWARE\SD -I..\FATFS\exfuns -I..\FATFS\src -I..\USMART -I..\FATFS\src\option -I..\TEXT -I..\PICTURE -I..\HARDWARE\OV7725 -I..\HARDWARE\EXTI-I C:\Users\Administrator\Desktop\OV7725_BMP\智能水表\USER\RTE-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I D:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\imageprocess.o --omf_browse ..\obj\imageprocess.crf --depend ..\obj\imageprocess.d)
 I (..\FATFS\src\ff.h)(0x505BD406)
 I (..\FATFS\src\integer.h)(0x4BD31212)
 I (..\FATFS\src\ffconf.h)(0x50236DB2)
-I (..\PICTURE\bmp.h)(0x5AF939A2)
+I (..\PICTURE\bmp.h)(0x5AFD182F)
 I (..\SYSTEM\sys\sys.h)(0x5513EB2F)
 I (..\USER\stm32f10x.h)(0x4D783CB4)
 I (..\CORE\core_cm3.h)(0x4D523B58)
@@ -169,7 +169,7 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
 I (D:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5475F300)
 I (..\HARDWARE\LCD\font.h)(0x50386A44)
-I (..\SYSTEM\usart\usart.h)(0x5AF5551B)
+I (..\SYSTEM\usart\usart.h)(0x5AFE46BE)
 I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5475F300)
 I (..\SYSTEM\delay\delay.h)(0x5513EB2F)
 F (..\HARDWARE\SPI\spi.c)(0x5513EB2E)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE\TOUCH -I..\HARDWARE\REMOTE -I..\HARDWARE\ADXL345 -I..\HARDWARE\DS18B20 -I..\HARDWARE\NRF24L01 -I..\HARDWARE\SRAM -I..\MALLOC -I..\HARDWARE\SD -I..\FATFS\exfuns -I..\FATFS\src -I..\USMART -I..\FATFS\src\option -I..\TEXT -I..\PICTURE -I..\HARDWARE\OV7725 -I..\HARDWARE\EXTI-I C:\Users\Administrator\Desktop\OV7725_BMP\智能水表\USER\RTE-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I D:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\spi.o --omf_browse ..\obj\spi.crf --depend ..\obj\spi.d)
@@ -187,7 +187,7 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
-I (..\SYSTEM\usart\usart.h)(0x5AF5551B)
+I (..\SYSTEM\usart\usart.h)(0x5AFE46BE)
 I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5475F300)
 F (..\HARDWARE\FLASH\flash.c)(0x5513EB2E)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE\TOUCH -I..\HARDWARE\REMOTE -I..\HARDWARE\ADXL345 -I..\HARDWARE\DS18B20 -I..\HARDWARE\NRF24L01 -I..\HARDWARE\SRAM -I..\MALLOC -I..\HARDWARE\SD -I..\FATFS\exfuns -I..\FATFS\src -I..\USMART -I..\FATFS\src\option -I..\TEXT -I..\PICTURE -I..\HARDWARE\OV7725 -I..\HARDWARE\EXTI-I C:\Users\Administrator\Desktop\OV7725_BMP\智能水表\USER\RTE-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I D:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\flash.o --omf_browse ..\obj\flash.crf --depend ..\obj\flash.d)
 I (..\HARDWARE\FLASH\flash.h)(0x5513EB2F)
@@ -221,7 +221,7 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
-I (..\SYSTEM\usart\usart.h)(0x5AF5551B)
+I (..\SYSTEM\usart\usart.h)(0x5AFE46BE)
 I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5475F300)
 F (..\HARDWARE\SD\MMC_SD.C)(0x5513EB2E)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE\TOUCH -I..\HARDWARE\REMOTE -I..\HARDWARE\ADXL345 -I..\HARDWARE\DS18B20 -I..\HARDWARE\NRF24L01 -I..\HARDWARE\SRAM -I..\MALLOC -I..\HARDWARE\SD -I..\FATFS\exfuns -I..\FATFS\src -I..\USMART -I..\FATFS\src\option -I..\TEXT -I..\PICTURE -I..\HARDWARE\OV7725 -I..\HARDWARE\EXTI-I C:\Users\Administrator\Desktop\OV7725_BMP\智能水表\USER\RTE-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I D:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\mmc_sd.o --omf_browse ..\obj\mmc_sd.crf --depend ..\obj\mmc_sd.d)
 I (..\SYSTEM\sys\sys.h)(0x5513EB2F)
@@ -239,7 +239,7 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
 I (..\HARDWARE\SD\mmc_sd.h)(0x5513EB2F)
 I (..\HARDWARE\SPI\spi.h)(0x503C7E38)
-I (..\SYSTEM\usart\usart.h)(0x5AF5551B)
+I (..\SYSTEM\usart\usart.h)(0x5AFE46BE)
 I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5475F300)
 F (..\HARDWARE\OV7725\sccb.c)(0x5513B95F)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE\TOUCH -I..\HARDWARE\REMOTE -I..\HARDWARE\ADXL345 -I..\HARDWARE\DS18B20 -I..\HARDWARE\NRF24L01 -I..\HARDWARE\SRAM -I..\MALLOC -I..\HARDWARE\SD -I..\FATFS\exfuns -I..\FATFS\src -I..\USMART -I..\FATFS\src\option -I..\TEXT -I..\PICTURE -I..\HARDWARE\OV7725 -I..\HARDWARE\EXTI-I C:\Users\Administrator\Desktop\OV7725_BMP\智能水表\USER\RTE-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I D:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\sccb.o --omf_browse ..\obj\sccb.crf --depend ..\obj\sccb.d)
 I (..\SYSTEM\sys\sys.h)(0x5513EB2F)
@@ -275,7 +275,7 @@ I (..\HARDWARE\OV7725\ov7725.h)(0x5AD0952E)
 I (..\HARDWARE\OV7725\sccb.h)(0x5AC347DA)
 I (..\HARDWARE\OV7725\ov7725config.h)(0x5AD09552)
 I (..\SYSTEM\delay\delay.h)(0x5513EB2F)
-I (..\SYSTEM\usart\usart.h)(0x5AF5551B)
+I (..\SYSTEM\usart\usart.h)(0x5AFE46BE)
 I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5475F300)
 F (..\HARDWARE\EXTI\exti.c)(0x5AF1327D)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE\TOUCH -I..\HARDWARE\REMOTE -I..\HARDWARE\ADXL345 -I..\HARDWARE\DS18B20 -I..\HARDWARE\NRF24L01 -I..\HARDWARE\SRAM -I..\MALLOC -I..\HARDWARE\SD -I..\FATFS\exfuns -I..\FATFS\src -I..\USMART -I..\FATFS\src\option -I..\TEXT -I..\PICTURE -I..\HARDWARE\OV7725 -I..\HARDWARE\EXTI-I C:\Users\Administrator\Desktop\OV7725_BMP\智能水表\USER\RTE-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I D:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\exti_1.o --omf_browse ..\obj\exti_1.crf --depend ..\obj\exti_1.d)
 I (..\HARDWARE\EXTI\exti.h)(0x5513B9DC)
@@ -295,7 +295,7 @@ I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
 I (..\HARDWARE\LED\led.h)(0x5513EB2F)
 I (..\HARDWARE\KEY\key.h)(0x5AF13666)
 I (..\SYSTEM\delay\delay.h)(0x5513EB2F)
-I (..\SYSTEM\usart\usart.h)(0x5AF5551B)
+I (..\SYSTEM\usart\usart.h)(0x5AFE46BE)
 I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5475F300)
 I (..\HARDWARE\OV7725\OV7725.h)(0x5AD0952E)
 I (..\HARDWARE\OV7725\sccb.h)(0x5AC347DA)
@@ -329,7 +329,7 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
-F (..\SYSTEM\usart\usart.c)(0x5AF58E50)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE\TOUCH -I..\HARDWARE\REMOTE -I..\HARDWARE\ADXL345 -I..\HARDWARE\DS18B20 -I..\HARDWARE\NRF24L01 -I..\HARDWARE\SRAM -I..\MALLOC -I..\HARDWARE\SD -I..\FATFS\exfuns -I..\FATFS\src -I..\USMART -I..\FATFS\src\option -I..\TEXT -I..\PICTURE -I..\HARDWARE\OV7725 -I..\HARDWARE\EXTI-I C:\Users\Administrator\Desktop\OV7725_BMP\智能水表\USER\RTE-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I D:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\usart.o --omf_browse ..\obj\usart.crf --depend ..\obj\usart.d)
+F (..\SYSTEM\usart\usart.c)(0x5AFE59F7)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE\TOUCH -I..\HARDWARE\REMOTE -I..\HARDWARE\ADXL345 -I..\HARDWARE\DS18B20 -I..\HARDWARE\NRF24L01 -I..\HARDWARE\SRAM -I..\MALLOC -I..\HARDWARE\SD -I..\FATFS\exfuns -I..\FATFS\src -I..\USMART -I..\FATFS\src\option -I..\TEXT -I..\PICTURE -I..\HARDWARE\OV7725 -I..\HARDWARE\EXTI-I C:\Users\Administrator\Desktop\OV7725_BMP\智能水表\USER\RTE-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I D:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\usart.o --omf_browse ..\obj\usart.crf --depend ..\obj\usart.d)
 I (..\SYSTEM\sys\sys.h)(0x5513EB2F)
 I (..\USER\stm32f10x.h)(0x4D783CB4)
 I (..\CORE\core_cm3.h)(0x4D523B58)
@@ -343,7 +343,7 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
-I (..\SYSTEM\usart\usart.h)(0x5AF5551B)
+I (..\SYSTEM\usart\usart.h)(0x5AFE46BE)
 I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5475F300)
 F (..\CORE\core_cm3.c)(0x4C0C587E)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE\TOUCH -I..\HARDWARE\REMOTE -I..\HARDWARE\ADXL345 -I..\HARDWARE\DS18B20 -I..\HARDWARE\NRF24L01 -I..\HARDWARE\SRAM -I..\MALLOC -I..\HARDWARE\SD -I..\FATFS\exfuns -I..\FATFS\src -I..\USMART -I..\FATFS\src\option -I..\TEXT -I..\PICTURE -I..\HARDWARE\OV7725 -I..\HARDWARE\EXTI-I C:\Users\Administrator\Desktop\OV7725_BMP\智能水表\USER\RTE-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I D:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\core_cm3.o --omf_browse ..\obj\core_cm3.crf --depend ..\obj\core_cm3.d)
 I (D:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5475F300)
@@ -514,7 +514,7 @@ I (..\FATFS\src\integer.h)(0x4BD31212)
 I (..\FATFS\src\ffconf.h)(0x50236DB2)
 I (..\FATFS\exfuns\fattester.h)(0x503CCFEE)
 I (..\MALLOC\malloc.h)(0x5513E682)
-I (..\SYSTEM\usart\usart.h)(0x5AF5551B)
+I (..\SYSTEM\usart\usart.h)(0x5AFE46BE)
 I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5475F300)
 F (..\FATFS\exfuns\fattester.c)(0x5513EB2E)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE\TOUCH -I..\HARDWARE\REMOTE -I..\HARDWARE\ADXL345 -I..\HARDWARE\DS18B20 -I..\HARDWARE\NRF24L01 -I..\HARDWARE\SRAM -I..\MALLOC -I..\HARDWARE\SD -I..\FATFS\exfuns -I..\FATFS\src -I..\USMART -I..\FATFS\src\option -I..\TEXT -I..\PICTURE -I..\HARDWARE\OV7725 -I..\HARDWARE\EXTI-I C:\Users\Administrator\Desktop\OV7725_BMP\智能水表\USER\RTE-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I D:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\fattester.o --omf_browse ..\obj\fattester.crf --depend ..\obj\fattester.d)
 I (..\FATFS\exfuns\fattester.h)(0x503CCFEE)
@@ -537,7 +537,7 @@ I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
 I (..\HARDWARE\SD\mmc_sd.h)(0x5513EB2F)
 I (..\USMART\usmart.h)(0x5513EB30)
 I (..\USMART\usmart_str.h)(0x5513EB30)
-I (..\SYSTEM\usart\usart.h)(0x5AF5551B)
+I (..\SYSTEM\usart\usart.h)(0x5AFE46BE)
 I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5475F300)
 I (..\FATFS\exfuns\exfuns.h)(0x503CCF24)
 I (..\MALLOC\malloc.h)(0x5513E682)
@@ -576,7 +576,7 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
-I (..\SYSTEM\usart\usart.h)(0x5AF5551B)
+I (..\SYSTEM\usart\usart.h)(0x5AFE46BE)
 I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5475F300)
 I (..\SYSTEM\sys\sys.h)(0x5513EB2F)
 F (..\USMART\usmart_config.c)(0x529D60C7)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE\TOUCH -I..\HARDWARE\REMOTE -I..\HARDWARE\ADXL345 -I..\HARDWARE\DS18B20 -I..\HARDWARE\NRF24L01 -I..\HARDWARE\SRAM -I..\MALLOC -I..\HARDWARE\SD -I..\FATFS\exfuns -I..\FATFS\src -I..\USMART -I..\FATFS\src\option -I..\TEXT -I..\PICTURE -I..\HARDWARE\OV7725 -I..\HARDWARE\EXTI-I C:\Users\Administrator\Desktop\OV7725_BMP\智能水表\USER\RTE-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I D:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\usmart_config.o --omf_browse ..\obj\usmart_config.crf --depend ..\obj\usmart_config.d)
@@ -596,7 +596,7 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
 I (..\SYSTEM\delay\delay.h)(0x5513EB2F)
 I (..\SYSTEM\sys\sys.h)(0x5513EB2F)
-I (..\SYSTEM\usart\usart.h)(0x5AF5551B)
+I (..\SYSTEM\usart\usart.h)(0x5AFE46BE)
 I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5475F300)
 I (..\HARDWARE\LCD\lcd.h)(0x5513EB2F)
 I (D:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5475F300)
@@ -606,7 +606,7 @@ I (..\FATFS\src\ff.h)(0x505BD406)
 I (..\FATFS\src\integer.h)(0x4BD31212)
 I (..\FATFS\src\ffconf.h)(0x50236DB2)
 I (..\FATFS\exfuns\exfuns.h)(0x503CCF24)
-I (..\PICTURE\bmp.h)(0x5AF939A2)
+I (..\PICTURE\bmp.h)(0x5AFD182F)
 I (..\PICTURE\tjpgd.h)(0x528F544A)
 I (..\PICTURE\integer.h)(0x4BD31212)
 I (..\PICTURE\gif.h)(0x5513EB30)
@@ -671,7 +671,7 @@ I (..\HARDWARE\LCD\lcd.h)(0x5513EB2F)
 I (D:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5475F300)
 I (..\TEXT\text.h)(0x5513EB2F)
 I (D:\Keil_v5\ARM\ARMCC\include\string.h)(0x5475F300)
-F (..\PICTURE\bmp.c)(0x5AF93986)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE\TOUCH -I..\HARDWARE\REMOTE -I..\HARDWARE\ADXL345 -I..\HARDWARE\DS18B20 -I..\HARDWARE\NRF24L01 -I..\HARDWARE\SRAM -I..\MALLOC -I..\HARDWARE\SD -I..\FATFS\exfuns -I..\FATFS\src -I..\USMART -I..\FATFS\src\option -I..\TEXT -I..\PICTURE -I..\HARDWARE\OV7725 -I..\HARDWARE\EXTI-I C:\Users\Administrator\Desktop\OV7725_BMP\智能水表\USER\RTE-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I D:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\bmp.o --omf_browse ..\obj\bmp.crf --depend ..\obj\bmp.d)
+F (..\PICTURE\bmp.c)(0x5AFCE610)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE\TOUCH -I..\HARDWARE\REMOTE -I..\HARDWARE\ADXL345 -I..\HARDWARE\DS18B20 -I..\HARDWARE\NRF24L01 -I..\HARDWARE\SRAM -I..\MALLOC -I..\HARDWARE\SD -I..\FATFS\exfuns -I..\FATFS\src -I..\USMART -I..\FATFS\src\option -I..\TEXT -I..\PICTURE -I..\HARDWARE\OV7725 -I..\HARDWARE\EXTI-I C:\Users\Administrator\Desktop\OV7725_BMP\智能水表\USER\RTE-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I D:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\bmp.o --omf_browse ..\obj\bmp.crf --depend ..\obj\bmp.d)
 I (..\PICTURE\piclib.h)(0x5513EB2F)
 I (..\SYSTEM\sys\sys.h)(0x5513EB2F)
 I (..\USER\stm32f10x.h)(0x4D783CB4)
@@ -693,7 +693,7 @@ I (..\FATFS\src\ff.h)(0x505BD406)
 I (..\FATFS\src\integer.h)(0x4BD31212)
 I (..\FATFS\src\ffconf.h)(0x50236DB2)
 I (..\FATFS\exfuns\exfuns.h)(0x503CCF24)
-I (..\PICTURE\bmp.h)(0x5AF939A2)
+I (..\PICTURE\bmp.h)(0x5AFD182F)
 I (..\PICTURE\tjpgd.h)(0x528F544A)
 I (..\PICTURE\integer.h)(0x4BD31212)
 I (..\PICTURE\gif.h)(0x5513EB30)
@@ -721,7 +721,7 @@ I (..\FATFS\src\ff.h)(0x505BD406)
 I (..\FATFS\src\integer.h)(0x4BD31212)
 I (..\FATFS\src\ffconf.h)(0x50236DB2)
 I (..\FATFS\exfuns\exfuns.h)(0x503CCF24)
-I (..\PICTURE\bmp.h)(0x5AF939A2)
+I (..\PICTURE\bmp.h)(0x5AFD182F)
 I (..\PICTURE\tjpgd.h)(0x528F544A)
 I (..\PICTURE\integer.h)(0x4BD31212)
 I (..\PICTURE\gif.h)(0x5513EB30)
@@ -748,7 +748,7 @@ I (..\FATFS\src\ff.h)(0x505BD406)
 I (..\FATFS\src\integer.h)(0x4BD31212)
 I (..\FATFS\src\ffconf.h)(0x50236DB2)
 I (..\FATFS\exfuns\exfuns.h)(0x503CCF24)
-I (..\PICTURE\bmp.h)(0x5AF939A2)
+I (..\PICTURE\bmp.h)(0x5AFD182F)
 I (..\PICTURE\tjpgd.h)(0x528F544A)
 I (..\PICTURE\integer.h)(0x4BD31212)
 I (..\PICTURE\gif.h)(0x5513EB30)
@@ -776,5 +776,5 @@ I (..\FATFS\src\ff.h)(0x505BD406)
 I (..\FATFS\src\integer.h)(0x4BD31212)
 I (..\FATFS\src\ffconf.h)(0x50236DB2)
 I (..\FATFS\exfuns\exfuns.h)(0x503CCF24)
-I (..\PICTURE\bmp.h)(0x5AF939A2)
+I (..\PICTURE\bmp.h)(0x5AFD182F)
 I (..\PICTURE\gif.h)(0x5513EB30)

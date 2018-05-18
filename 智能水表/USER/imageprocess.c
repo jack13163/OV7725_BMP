@@ -334,7 +334,7 @@ u8 BP_Recongnization(const TCHAR* src)
 {
 	//文件打开标志
 	u8 res1, res2, res3, res4, res5, res6, res7, res8;
-	u8 rgb[3];
+	u8 color[4];
 	u8 gray;
 	double pMax;//最大的灰度值
 	double tmp;
@@ -356,7 +356,7 @@ u8 BP_Recongnization(const TCHAR* src)
 		res4 = f_open(&f4, "0:BP/b2.txt", FA_READ);
 		res5 = f_open(&f5, "0:BP/x1.dat", FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
 		res6 = f_open(&f6, "0:BP/x2.dat", FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
-		res7 = f_open(&f7, src, FA_READ);
+		res7 = f_open(&f7, "0:PICS/0.bmp", FA_READ);
 		res8 = f_open(&f8, "0:BP/x.dat", FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
 	}while((FR_OK != res1) || (FR_OK != res2) || (FR_OK != res3) || (FR_OK != res4) || (FR_OK != res5) || (FR_OK != res6) || (FR_OK != res7) || (FR_OK != res8));
 	//1.数据归一化
@@ -375,14 +375,15 @@ u8 BP_Recongnization(const TCHAR* src)
 	printfBmpInfo(bmp.bmiHeader);
 	
 	//定位到位图数据区域
-	f_lseek(&f7, bmp.bmfHeader.bfOffBits);
+	f_lseek(&f7, bmp.bmfHeader.bfOffBits); 
 	//查找最大值
-	for(i = 0; i < width; i++)
+	for(i = 0; i < height; i++)
 	{
-		for(j = 0; j < height; j++)
+		for(j = 0; j < width; j++)
 		{
-			f_read(&f7, &rgb, sizeof(rgb), &num);//输入
-			gray = rgb[0];
+			f_read(&f7, &color, sizeof(color), &num);//输入
+			gray = color[0];
+			printf("%d ", gray);
 			if(gray > pMax)
 			{
 				pMax = gray;
@@ -390,24 +391,26 @@ u8 BP_Recongnization(const TCHAR* src)
 		}
 	}
 	
-	f_lseek(&f7, 0);
+	//定位到位图数据区域
+	f_lseek(&f7, bmp.bmfHeader.bfOffBits);
 	//利用最大值归一化，同时保存到一个临时的文件中
-	for(i = 0; i < width; i++)
+	for(i = 0; i < height; i++)
 	{
-		for(j = 0; j < height; j++)
+		for(j = 0; j < width; j++)
 		{
-			f_read(&f7, &rgb, sizeof(rgb), &num);//输入
-			gray = rgb[0];
+			f_read(&f7, &color, sizeof(color), &num);//输入
+			gray = color[0];//r
+			
 			tmp = gray / pMax;
 			f_write(&f8, &tmp, sizeof(tmp), &num);//x
 		}
 	}
 	
-	f_lseek(&f8, 0);
 	//2.计算隐藏层的输入输出
 	for(i = 0; i < hideNum; i++)
 	{
 		tmp = 0.0;
+		f_lseek(&f8, 0);
 		for(j = 0; j < inNum; j++)
 		{
 			//读取一个双精度浮点型数据
@@ -418,7 +421,6 @@ u8 BP_Recongnization(const TCHAR* src)
 		}
 		readDouble(&f3, &t3);//b1
 		t5 = 1.0 / (1.0 + eC(-t3 - tmp));
-		printf("隐含层节点%d:%f\r\n", i, t5);
 		f_write(&f5, &t5, sizeof(t5), &num);//x1
 	}
 	

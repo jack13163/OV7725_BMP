@@ -120,9 +120,7 @@ void uart_init(u32 bound){
 void USART1_IRQHandler(void)                	//串口1中断服务程序
 	{
 	u8 Res;
-#ifdef OS_TICKS_PER_SEC	 	//如果时钟节拍数定义了,说明要使用ucosII了.
-	OSIntEnter();    
-#endif
+
 	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
 		{
 		Res =USART_ReceiveData(USART1);//(USART1->DR);	//读取接收到的数据
@@ -146,9 +144,6 @@ void USART1_IRQHandler(void)                	//串口1中断服务程序
 				}
 			}   		 
      } 
-#ifdef OS_TICKS_PER_SEC	 	//如果时钟节拍数定义了,说明要使用ucosII了.
-	OSIntExit();  											 
-#endif
 }
 
 #endif
@@ -195,27 +190,21 @@ void usart2_init(u32 bound)
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3 ;//抢占优先级3
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		//子优先级3
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
-	NVIC_Init(&NVIC_InitStructure);	//根据指定的参数初始化VIC寄存器
+	NVIC_Init(&NVIC_InitStructure);	//根据指定的参数初始化NVIC寄存器
 }
 
 void USART2_IRQHandler(void)                	//串口2中断服务程序
 {
-	u8 Res;
-#ifdef OS_TICKS_PER_SEC	 	//如果时钟节拍数定义了,说明要使用ucosII了.
-	OSIntEnter();    
-#endif
-	if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
+	u8 tmp;
+	if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)  //接收中断
 	{
-		Res =USART_ReceiveData(USART2);//(USART1->DR);	//读取接收到的数据
-		
-		if('K'==Res||'k'==Res)//接收未完成
+		tmp = USART_ReceiveData(USART2);  //读取接收到的数据
+		if(tmp != 0x00)
 		{
-			USART2_RX_STA|=0x8000;	//接收完成了 
+			USART2_RX_BUF[USART2_RX_STA] = tmp;
+			USART2_RX_STA++;
 		}
   }
-#ifdef OS_TICKS_PER_SEC	 	//如果时钟节拍数定义了,说明要使用ucosII了.
-	OSIntExit();
-#endif
 } 
 #endif	
 

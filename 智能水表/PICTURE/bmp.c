@@ -376,7 +376,7 @@ void printfBmpInfo(BITMAPINFOHEADER bmpInfo)
 	printf("信息头所占字节大小：%d\r\n", bmpInfo.biSize);
 	printf("位图宽度：%ld\r\n", bmpInfo.biWidth);
 	printf("位图高度：%ld\r\n", bmpInfo.biHeight);
-	printf("每像素所占字节数：%d\r\n", bmpInfo.biBitCount);
+	printf("每像素所占位数：%d\r\n", bmpInfo.biBitCount);
 	printf("像素数据的压缩类型：%d\r\n", bmpInfo.biCompression);
 	printf("位图像素数据所占的字节数：%d\r\n", bmpInfo.biSizeImage);	
 }

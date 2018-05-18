@@ -133,18 +133,39 @@ void camera_refresh(void)
 	}
 }
 
+//通过串口2发送AT指令给NB-IoT模块
+void SendData()
+{
+	data[0] = 0x01;
+	data[1] = 0x46;
+	data[2] = 0x00;
+	data[3] = 0x00;
+	data[4] = 0x00;
+	data[5] = 0x01;
+	data[6] = 0x02;
+	data[7] = 0x00;//数据
+	data[8] = 0x12;
+				
+	getCrc16(data, res);
+				
+	Usart_SendString(USART2, "AT+NMGS=11,");
+	Usart_SendString(USART2, res);
+	Usart_SendString(USART2, "\r\n");
+}
+
 int main(void)
-{	 
+{
 	u8 lightmode=0,saturation=2,brightness=2,contrast=2,effect=0;
-	u8 i = 0;
-	int res[20];
+	u8 i = 0, j = 0;
+	int res[5];//识别结果
+	u8 flag = 0;
 	
 	delay_init();	    	//延时函数初始化	  
 	uart_init(9600);	 	//串口初始化为9600
 	usart2_init(115200);
 	LCD_Init();					//初始化LCD液晶显示屏
 	KEY_Init();					//按键初始化
- 	mem_init(SRAMIN);		//初始化内部内存池	(很重要)
+ 	mem_init(SRAMIN);		//初始化内部内存池(很重要)
  	exfuns_init();			//为fatfs相关变量申请内存  
   f_mount(0,fs[0]); 	//挂载SD卡 
 	piclib_init();			//初始化画图
@@ -195,49 +216,51 @@ int main(void)
 			//图像分割(图片文件夹的路径为0:PICS/)
 			
 			//图像识别
-			res[0] = BP_Recongnization("0:PICS/0.bmp");
-			res[1] = BP_Recongnization("0:PICS/1.bmp");
-			res[2] = BP_Recongnization("0:PICS/2.bmp");
-			res[3] = BP_Recongnization("0:PICS/3.bmp");
-			res[4] = BP_Recongnization("0:PICS/4.bmp");
-			res[5] = BP_Recongnization("0:PICS/5.bmp");
-			res[6] = BP_Recongnization("0:PICS/6.bmp");
-			res[7] = BP_Recongnization("0:PICS/7.bmp");
-			res[8] = BP_Recongnization("0:PICS/8.bmp");
-			res[9] = BP_Recongnization("0:PICS/9.bmp");
+//			res[0] = BP_Recongnization("0:PICS/0.bmp");
+//			res[1] = BP_Recongnization("0:PICS/1.bmp");
+//			res[2] = BP_Recongnization("0:PICS/2.bmp");
+//			res[3] = BP_Recongnization("0:PICS/3.bmp");
+//			res[4] = BP_Recongnization("0:PICS/4.bmp");
+//			
+//			//显示图像处理结果
+//			LCD_Clear(BLACK);
+//			ai_load_picfile("0:test3.bmp",0,0,lcddev.width,lcddev.height,1);//显示图片
+//			delay_ms(5000);
+//			LCD_Clear(BLACK);//清屏之后可以防止出现割屏现象
 			
-			//显示图像处理结果
-			LCD_Clear(BLACK);
-			ai_load_picfile("0:test3.bmp",0,0,lcddev.width,lcddev.height,1);//显示图片
-			delay_ms(5000);
-			LCD_Clear(BLACK);//清屏之后可以防止出现割屏现象
-			
-			//将处理后的数字发送到透传云服务器
+			//将处理后的数字发送到NB-IoT模块
 			do
 			{
-				data[0] = 0x01;
-				data[1] = 0x46;
-				data[2] = 0x00;
-				data[3] = 0x00;
-				data[4] = 0x00;
-				data[5] = 0x01;
-				data[6] = 0x02;
-				data[7] = 0x00;//数据
-				data[8] = 0x12;
-				
-				getCrc16(data, res);
-				
-				Usart_SendString(USART2, "AT+NMGS=11,");
-				Usart_SendString(USART2, res);
-				Usart_SendString(USART2, "\r\n");
+				//发送AT指令
+				SendData();
 				
 				//等待接收成功后回应的结果
-				delay_ms(3000);
-			}while((USART2_RX_STA & 0x8000) == 0);		//接收状态标志。0~13位：接收到的有效字节数目；14位：接收到0x0d；15位：接收完成标志
+				delay_ms(500);
+				
+				//判断是否发送成功
+				while(j < USART2_RX_STA)
+				{
+					if((USART2_RX_BUF[j] == 'O' || USART2_RX_BUF[j] == 'o') && (USART2_RX_BUF[j+1] == 'K' || USART2_RX_BUF[j+1] == 'k'))
+					{
+						flag = 1;//发送成功
+						USART2_RX_STA = 0;
+						j = 0;
+						break;
+					}
+					j++;
+					
+					if(j == USART2_RX_STA)
+					{
+						USART2_RX_STA = 0;
+						j = 0;
+						break;
+					}
+				}
+			}while(flag == 0);
 			
 			continue;
 		}
-	
+
 		//按下S4显示图片处理结果
 		if(KEY_Scan(1) == S4)
 		{
