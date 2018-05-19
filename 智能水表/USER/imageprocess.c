@@ -302,25 +302,6 @@ void readDoubleRandom(FIL *fp, double* ret, int n)
 	readDouble(fp, ret);
 }
 
-/* 求e的m次方的值(m为绝对值0~1之间的数)
-*/
-double eC(double m)
-{
-	int i, j;
-	int n = 10, c= 1;//n值即泰勒公式中的n值用于确定精确度
-	double d = 1.0;
-	for(i=1;i<=n;i++)
-	{  
-    for(j=1;j<=i;j++)
-		{  
-			c*=j;
-    }
-    d+=pow(m,i)/c;  
-    c=1;  
-	}
-	return d;
-}
-
 /* BP神经网络识别数字
  * 思路：已知权值矩阵w、v，以及阀值矩阵b1、b2
  * 需要使用四个文件：
@@ -356,7 +337,7 @@ u8 BP_Recongnization(const TCHAR* src)
 		res4 = f_open(&f4, "0:BP/b2.txt", FA_READ);
 		res5 = f_open(&f5, "0:BP/x1.dat", FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
 		res6 = f_open(&f6, "0:BP/x2.dat", FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
-		res7 = f_open(&f7, "0:PICS/0.bmp", FA_READ);
+		res7 = f_open(&f7, src, FA_READ);
 		res8 = f_open(&f8, "0:BP/x.dat", FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
 	}while((FR_OK != res1) || (FR_OK != res2) || (FR_OK != res3) || (FR_OK != res4) || (FR_OK != res5) || (FR_OK != res6) || (FR_OK != res7) || (FR_OK != res8));
 	//1.数据归一化
@@ -383,7 +364,6 @@ u8 BP_Recongnization(const TCHAR* src)
 		{
 			f_read(&f7, &color, sizeof(color), &num);//输入
 			gray = color[0];
-			printf("%d ", gray);
 			if(gray > pMax)
 			{
 				pMax = gray;
@@ -391,6 +371,7 @@ u8 BP_Recongnization(const TCHAR* src)
 		}
 	}
 	
+	printf("\r\n");
 	//定位到位图数据区域
 	f_lseek(&f7, bmp.bmfHeader.bfOffBits);
 	//利用最大值归一化，同时保存到一个临时的文件中
@@ -402,6 +383,7 @@ u8 BP_Recongnization(const TCHAR* src)
 			gray = color[0];//r
 			
 			tmp = gray / pMax;
+			//printf("%f ", tmp);
 			f_write(&f8, &tmp, sizeof(tmp), &num);//x
 		}
 	}
@@ -418,9 +400,11 @@ u8 BP_Recongnization(const TCHAR* src)
 			f_read(&f8, &t2, sizeof(t2), &num);//x
 			
 			tmp += t1 * t2;
+			
 		}
 		readDouble(&f3, &t3);//b1
-		t5 = 1.0 / (1.0 + eC(-t3 - tmp));
+		
+		t5 = 1.0 / (1.0 + exp(-t3 - tmp));
 		f_write(&f5, &t5, sizeof(t5), &num);//x1
 	}
 	
@@ -429,6 +413,7 @@ u8 BP_Recongnization(const TCHAR* src)
 	for(i = 0; i < outNum; i++)
 	{
 		tmp = 0.0;
+		f_lseek(&f5, 0);
 		for(j = 0; j < hideNum; j++)
 		{
 			//读取一个双精度浮点型数据
@@ -438,8 +423,7 @@ u8 BP_Recongnization(const TCHAR* src)
 			tmp += t1 * t2;
 		}
 		readDouble(&f4, &t3);//b2
-		t5 = 1.0 / (1.0 + eC(-t3 - tmp));
-		printf("输出层节点%d:%f\r\n", i, t5);
+		t5 = 1.0 / (1.0 + exp(-t3 - tmp));
 		f_write(&f6, &t5, sizeof(t5), &num);//x2
 	}
 	
@@ -455,7 +439,7 @@ u8 BP_Recongnization(const TCHAR* src)
 			maxi = i;
 		}
 	}
-	
+	printf("识别结果:%d\r\n\r\n", maxi);
 	//关闭文件
 	f_close(&f1);
 	f_close(&f2);
@@ -465,6 +449,5 @@ u8 BP_Recongnization(const TCHAR* src)
 	f_close(&f6);
 	f_close(&f7);
 	f_close(&f8);
-	printf("-------------------------------------------------------------------------------------\r\n");
 	return maxi;
 }

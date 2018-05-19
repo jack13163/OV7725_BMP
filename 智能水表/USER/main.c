@@ -157,7 +157,7 @@ int main(void)
 {
 	u8 lightmode=0,saturation=2,brightness=2,contrast=2,effect=0;
 	u8 i = 0, j = 0;
-	int res[5];//识别结果
+	int res[50];//识别结果
 	u8 flag = 0;
 	
 	delay_init();	    	//延时函数初始化	  
@@ -216,11 +216,24 @@ int main(void)
 			//图像分割(图片文件夹的路径为0:PICS/)
 			
 			//图像识别
-//			res[0] = BP_Recongnization("0:PICS/0.bmp");
-//			res[1] = BP_Recongnization("0:PICS/1.bmp");
-//			res[2] = BP_Recongnization("0:PICS/2.bmp");
-//			res[3] = BP_Recongnization("0:PICS/3.bmp");
-//			res[4] = BP_Recongnization("0:PICS/4.bmp");
+			res[0] = BP_Recongnization("0:PICS/0.bmp");
+			res[1] = BP_Recongnization("0:PICS/1.bmp");
+			res[2] = BP_Recongnization("0:PICS/2.bmp");
+			res[3] = BP_Recongnization("0:PICS/3.bmp");
+			res[4] = BP_Recongnization("0:PICS/4.bmp");
+			res[5] = BP_Recongnization("0:PICS/5.bmp");
+			res[6] = BP_Recongnization("0:PICS/6.bmp");
+			res[7] = BP_Recongnization("0:PICS/7.bmp");
+			res[8] = BP_Recongnization("0:PICS/8.bmp");
+			res[9] = BP_Recongnization("0:PICS/9.bmp");
+			res[10] = BP_Recongnization("0:PICS/10.bmp");
+			res[11] = BP_Recongnization("0:PICS/11.bmp");
+			res[12] = BP_Recongnization("0:PICS/12.bmp");
+			res[13] = BP_Recongnization("0:PICS/13.bmp");
+			res[14] = BP_Recongnization("0:PICS/14.bmp");
+			res[15] = BP_Recongnization("0:PICS/15.bmp");
+			res[16] = BP_Recongnization("0:PICS/16.bmp");
+			res[17] = BP_Recongnization("0:PICS/17.bmp");
 //			
 //			//显示图像处理结果
 //			LCD_Clear(BLACK);
