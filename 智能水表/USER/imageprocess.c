@@ -352,8 +352,8 @@ u8 BP_Recongnization(const TCHAR* src)
 	hideNum = (t - hideNum * 1.0) > 0.5 ? hideNum +1 : hideNum;
 	
 	//打印位图信息
-	printfBmpFileInfo(bmp.bmfHeader);
-	printfBmpInfo(bmp.bmiHeader);
+	//printfBmpFileInfo(bmp.bmfHeader);
+	//printfBmpInfo(bmp.bmiHeader);
 	
 	//定位到位图数据区域
 	f_lseek(&f7, bmp.bmfHeader.bfOffBits); 
@@ -371,7 +371,6 @@ u8 BP_Recongnization(const TCHAR* src)
 		}
 	}
 	
-	printf("\r\n");
 	//定位到位图数据区域
 	f_lseek(&f7, bmp.bmfHeader.bfOffBits);
 	//利用最大值归一化，同时保存到一个临时的文件中
@@ -439,7 +438,7 @@ u8 BP_Recongnization(const TCHAR* src)
 			maxi = i;
 		}
 	}
-	printf("识别结果:%d\r\n\r\n", maxi);
+	printf("%s的识别结果:%d\r\n", src, maxi);
 	//关闭文件
 	f_close(&f1);
 	f_close(&f2);
