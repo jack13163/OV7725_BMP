@@ -26,13 +26,29 @@ Project File Date:  05/12/2018
 
 <h2>Output:</h2>
 Build target 'Target 1'
+compiling main.c...
+imageprocess.h(39): warning:  #1-D: last line of file ends without a newline
+  #endif
+main.c(162): warning:  #223-D: function "getString" declared implicitly
+        getString(data, 9, datastr);
+main.c(164): warning:  #223-D: function "getCrc16" declared implicitly
+        getCrc16(data, 9, res);
+main.c(173): warning:  #223-D: function "Usart_SendString" declared implicitly
+        Usart_SendString(USART2, t);
+main.c(186): warning:  #223-D: function "usart2_init" declared implicitly
+        usart2_init(115200);
+main.c(273): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "u8 *"
+                        LCD_ShowString(60,210,200,16,16, r);
+main.c(319): warning:  #1-D: last line of file ends without a newline
+  }
+main.c: 7 warnings, 0 errors
 compiling exti.c...
 linking...
 ..\OBJ\PICTURE.axf: Warning: L6304W: Duplicate input file ..\obj\exti_1.o ignored.
-Program Size: Code=76008 RO-data=6752 RW-data=1004 ZI-data=263188  
+Program Size: Code=76140 RO-data=6748 RW-data=1004 ZI-data=263148  
 Finished: 0 information, 1 warning and 0 error messages.
 FromELF: creating hex file...
-"..\OBJ\PICTURE.axf" - 0 Error(s), 1 Warning(s).
+"..\OBJ\PICTURE.axf" - 0 Error(s), 8 Warning(s).
 
 <h2>Collection of Component include folders:</h2>
   C:\Users\Administrator\Desktop\OV7725_BMP\ÖÇÄÜË®±í\USER\RTE

@@ -8,12 +8,11 @@
 #include "exti.h"
 #include "led.h"
 #include "imageprocess.h"
+#include "string.h"
 
 extern u8 ov_sta;	//在exit.c里面定义
 extern u16 USART2_RX_STA;//在usart.c中定义
 extern u8 USART2_RX_BUF[USART_REC_LEN];//在usart.c中定义
-extern u8 data[11];//在crc16.c中定义
-extern char res[22];//在crc16.c中定义
 
 //由于OV7725传感器安装方式原因,OV7725_WINDOW_WIDTH相当于LCD的高度，OV7725_WINDOW_HEIGHT相当于LCD的宽度
 //注意：此宏定义只对OV7725有效
@@ -136,6 +135,19 @@ void camera_refresh(void)
 //通过串口2发送AT指令给NB-IoT模块
 void SendData()
 {
+	int i = 0;
+	char t[50];
+	char data[10];
+	char datastr[21];
+	char res[5];
+	
+	//初始化t
+	for(i = 0; i < 50; i++)
+	{
+		t[i] = '\0';
+	}
+	
+	//准备数据
 	data[0] = 0x01;
 	data[1] = 0x46;
 	data[2] = 0x00;
@@ -144,20 +156,28 @@ void SendData()
 	data[5] = 0x01;
 	data[6] = 0x02;
 	data[7] = 0x00;//数据
-	data[8] = 0x12;
-				
-	getCrc16(data, res);
-				
-	Usart_SendString(USART2, "AT+NMGS=11,");
-	Usart_SendString(USART2, res);
-	Usart_SendString(USART2, "\r\n");
+	data[8] = 0x64;
+	
+	//获取字节数据的字符串形式
+	getString(data, 9, datastr);
+	//获取字节数据的crc16校验码
+	getCrc16(data, 9, res);
+	
+	//字符串拼接
+	strcpy(t, "AT+NMGS=11,");
+	strcat(t, datastr);
+	strcat(t, res);
+	strcat(t, "\r\n");
+	
+	//发送
+	Usart_SendString(USART2, t);
 }
 
 int main(void)
 {
 	u8 lightmode=0,saturation=2,brightness=2,contrast=2,effect=0;
 	u8 i = 0, j = 0;
-	int res[5];//识别结果
+	int r1[5];//识别结果
 	char r[6];
 	u8 flag = 0;
 	
@@ -236,22 +256,22 @@ int main(void)
 			LCD_Clear(WHITE);
 			LCD_ShowString(60,210,200,16,16,"Image Recognition...");
 			//图像识别
-			res[0] = BP_Recongnization("0:PICS/0.bmp");
-			res[1] = BP_Recongnization("0:PICS/1.bmp");
-			res[2] = BP_Recongnization("0:PICS/2.bmp");
-			res[3] = BP_Recongnization("0:PICS/3.bmp");
-			res[4] = BP_Recongnization("0:PICS/4.bmp");
+			r1[0] = BP_Recongnization("0:PICS/0.bmp");
+			r1[1] = BP_Recongnization("0:PICS/1.bmp");
+			r1[2] = BP_Recongnization("0:PICS/2.bmp");
+			r1[3] = BP_Recongnization("0:PICS/3.bmp");
+			r1[4] = BP_Recongnization("0:PICS/4.bmp");
 			
-			r[0] = res[0] + '0';
-			r[1] = res[1] + '0';
-			r[2] = res[2] + '0';
-			r[3] = res[3] + '0';
-			r[4] = res[4] + '0';
+			r[0] = r1[0] + '0';
+			r[1] = r1[1] + '0';
+			r[2] = r1[2] + '0';
+			r[3] = r1[3] + '0';
+			r[4] = r1[4] + '0';
 			r[5] = '\0';
 			//输出识别结果
 			LCD_Clear(WHITE);
 			LCD_ShowString(60,210,200,16,16, r);
-			printf("识别结果:%d%d%d%d%d", res[0], res[1], res[2], res[3], res[4]);
+			printf("识别结果:%d%d%d%d%d", r1[0], r1[1], r1[2], r1[3], r1[4]);
 			delay_ms(5000);
 			
 			continue;
@@ -263,16 +283,18 @@ int main(void)
 			//将处理后的数字发送到NB-IoT模块
 			do
 			{
-				//发送AT指令
+				//发送AT指令（需要提前进入临时AT指令模式）
 				SendData();
 				
 				//等待接收成功后回应的结果
-				delay_ms(500);
+				delay_ms(3000);
 				
+				printf("send status:");
 				//判断是否发送成功
 				while(j < USART2_RX_STA)
 				{
-					if((USART2_RX_BUF[j] == 'O' || USART2_RX_BUF[j] == 'o') && (USART2_RX_BUF[j+1] == 'K' || USART2_RX_BUF[j+1] == 'k'))
+					printf("%c", USART2_RX_BUF[j]);
+					if((USART2_RX_BUF[j-1] == 'O' || USART2_RX_BUF[j-1] == 'o') && (USART2_RX_BUF[j] == 'K' || USART2_RX_BUF[j] == 'k'))
 					{
 						flag = 1;//发送成功
 						USART2_RX_STA = 0;
@@ -280,14 +302,8 @@ int main(void)
 						break;
 					}
 					j++;
-					
-					if(j == USART2_RX_STA)
-					{
-						USART2_RX_STA = 0;
-						j = 0;
-						break;
-					}
 				}
+				printf("\r\n");
 			}while(flag == 0);
 			
 			continue;

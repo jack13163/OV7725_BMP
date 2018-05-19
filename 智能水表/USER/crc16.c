@@ -3,8 +3,6 @@
 //crc16检验算法
 //014600000001020064共九个字节，最后两个字节代表数据，另外还需要多追加两个字节的校验码
 //待发送的数据帧（共11个字节）
-u8 data[11];
-char res[22];
 
 
 //将一个字节数据转换为两个字符
@@ -19,11 +17,11 @@ char byteToChar(u8 b)
 * data：字节数组
 * str：字符数组（结果）
 */
-void getCrcString(u8 *data, char *str)
+void getString(u8 *data, int len, char *str)
 {
 	u8 i;
 	u8 res1,res2;
-	for(i = 0; i < 11; i++)
+	for(i = 0; i < len; i++)
 	{
 		res1 = ((data[i] & 0xF0) >> 4);
 		res2 = data[i] & 0x0F;
@@ -31,6 +29,7 @@ void getCrcString(u8 *data, char *str)
 		str[2*i] = byteToChar(res1);
 		str[2*i+1] = byteToChar(res2);
 	}
+	str[2 * len] = '\0';
 }
 
 
@@ -38,14 +37,15 @@ void getCrcString(u8 *data, char *str)
 * data:已经填充好的数据帧，需要计算校验码
 * crcstr:crc16检验后的生成的字符串数组
 */
-void getCrc16(u8 *data, char* crcstr)
+void getCrc16(u8 *data, int len, char* crcstr)
 {
 	//定义crc16的生成多项式
 	u16 gx = 0xA001;
 	u8 i, j;
 	u16 crcreg = 0xFFFF;
+	u8 d[2];
 	
-	for(i = 0; i < 9; i++)
+	for(i = 0; i < len; i++)
 	{
 		crcreg = (u16)(crcreg ^ data[i]);
 		for(j = 0; j < 8; j++)
@@ -54,8 +54,7 @@ void getCrc16(u8 *data, char* crcstr)
 		}
 	}
 	
-	data[9] = (u8)(crcreg & 0x00FF);
-	data[10] = (u8)((crcreg & 0xFF00) >> 8);
-	getCrcString(data, res);
+	d[0] = (u8)(crcreg & 0x00FF);
+	d[1] = (u8)((crcreg & 0xFF00) >> 8);
+	getString(d, 2, crcstr);
 }
-
