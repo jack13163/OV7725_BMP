@@ -26,24 +26,24 @@ Project File Date:  05/12/2018
 
 <h2>Output:</h2>
 Build target 'Target 1'
-compiling imageprocess.c...
+compiling main.c...
 imageprocess.h(39): warning:  #1-D: last line of file ends without a newline
   #endif
-imageprocess.c(31): warning:  #177-D: variable "t" was declared but never referenced
-        u8 t = 0;
-imageprocess.c(79): warning:  #177-D: variable "t" was declared but never referenced
-        u8 t = 0;
-imageprocess.c(452): warning:  #1-D: last line of file ends without a newline
+main.c(149): warning:  #223-D: function "getCrc16" declared implicitly
+        getCrc16(data, res);
+main.c(151): warning:  #223-D: function "Usart_SendString" declared implicitly
+        Usart_SendString(USART2, "AT+NMGS=11,");
+main.c(166): warning:  #223-D: function "usart2_init" declared implicitly
+        usart2_init(115200);
+main.c(253): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "u8 *"
+                        LCD_ShowString(60,210,200,16,16, r);
+main.c(306): warning:  #1-D: last line of file ends without a newline
   }
-imageprocess.c(323): warning:  #177-D: variable "d" was declared but never referenced
-        double d;
-imageprocess.c(326): warning:  #177-D: variable "t4" was declared but never referenced
-        double t1, t2, t3, t4, t5;
-imageprocess.c: 6 warnings, 0 errors
+main.c: 6 warnings, 0 errors
 compiling exti.c...
 linking...
 ..\OBJ\PICTURE.axf: Warning: L6304W: Duplicate input file ..\obj\exti_1.o ignored.
-Program Size: Code=76068 RO-data=6748 RW-data=1004 ZI-data=263188  
+Program Size: Code=76060 RO-data=6748 RW-data=1004 ZI-data=263188  
 Finished: 0 information, 1 warning and 0 error messages.
 FromELF: creating hex file...
 "..\OBJ\PICTURE.axf" - 0 Error(s), 7 Warning(s).

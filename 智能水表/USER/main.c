@@ -157,7 +157,8 @@ int main(void)
 {
 	u8 lightmode=0,saturation=2,brightness=2,contrast=2,effect=0;
 	u8 i = 0, j = 0;
-	int res[50];//识别结果
+	int res[5];//识别结果
+	char r[6];
 	u8 flag = 0;
 	
 	delay_init();	    	//延时函数初始化	  
@@ -172,8 +173,8 @@ int main(void)
 
 	while(OV7725_Init() != 0);				//初始化OV7725摄像头
 	
+	POINT_COLOR = RED;
 	LCD_ShowString(60,210,200,16,16,"OV7725 Init OK");
-	POINT_COLOR = GRED;
 	//特效
   OV7725_Light_Mode(lightmode);
 	OV7725_Color_Saturation(saturation);
@@ -207,39 +208,50 @@ int main(void)
 		if(KEY_Scan(1) == S3)
 		{
 			LCD_Clear(WHITE);
-			LCD_ShowString(60,210,200,16,16,"Image Processing!");
+			LCD_ShowString(60,210,200,16,16,"Graying......");
 			
 			//图像灰度化
-			//Graying("0:test1.bmp", "0:test2.bmp");
-			//图像二值化
-			//Ostu("0:test2.bmp", "0:test3.bmp");
-			//图像分割(图片文件夹的路径为0:PICS/)
+			Graying("0:test1.bmp", "0:test2.bmp");
 			
+			//显示图像处理结果
+			LCD_Clear(BLACK);
+			ai_load_picfile("0:test2.bmp",0,0,lcddev.width,lcddev.height,1);//显示图片
+			delay_ms(5000);
+			LCD_Clear(BLACK);//清屏之后可以防止出现割屏现象
+
+			LCD_Clear(WHITE);
+			LCD_ShowString(60,210,200,16,16,"Ostu......");
+			
+			//图像二值化
+			Ostu("0:test2.bmp", "0:test3.bmp");
+			//显示图像处理结果
+			LCD_Clear(BLACK);
+			ai_load_picfile("0:test3.bmp",0,0,lcddev.width,lcddev.height,1);//显示图片
+			delay_ms(5000);
+			LCD_Clear(BLACK);//清屏之后可以防止出现割屏现象
+			
+			//图像分割(图片文件夹的路径为0:PICS/)
+			//...
+			
+			LCD_Clear(WHITE);
+			LCD_ShowString(60,210,200,16,16,"Image Recognition......");
 			//图像识别
 			res[0] = BP_Recongnization("0:PICS/0.bmp");
 			res[1] = BP_Recongnization("0:PICS/1.bmp");
 			res[2] = BP_Recongnization("0:PICS/2.bmp");
 			res[3] = BP_Recongnization("0:PICS/3.bmp");
 			res[4] = BP_Recongnization("0:PICS/4.bmp");
-			res[5] = BP_Recongnization("0:PICS/5.bmp");
-			res[6] = BP_Recongnization("0:PICS/6.bmp");
-			res[7] = BP_Recongnization("0:PICS/7.bmp");
-			res[8] = BP_Recongnization("0:PICS/8.bmp");
-			res[9] = BP_Recongnization("0:PICS/9.bmp");
-			res[10] = BP_Recongnization("0:PICS/10.bmp");
-			res[11] = BP_Recongnization("0:PICS/11.bmp");
-			res[12] = BP_Recongnization("0:PICS/12.bmp");
-			res[13] = BP_Recongnization("0:PICS/13.bmp");
-			res[14] = BP_Recongnization("0:PICS/14.bmp");
-			res[15] = BP_Recongnization("0:PICS/15.bmp");
-			res[16] = BP_Recongnization("0:PICS/16.bmp");
-			res[17] = BP_Recongnization("0:PICS/17.bmp");
-//			
-//			//显示图像处理结果
-//			LCD_Clear(BLACK);
-//			ai_load_picfile("0:test3.bmp",0,0,lcddev.width,lcddev.height,1);//显示图片
-//			delay_ms(5000);
-//			LCD_Clear(BLACK);//清屏之后可以防止出现割屏现象
+			
+			r[0] = res[0] + '0';
+			r[1] = res[1] + '0';
+			r[2] = res[2] + '0';
+			r[3] = res[3] + '0';
+			r[4] = res[4] + '0';
+			r[5] = '\0';
+			//输出识别结果
+			LCD_Clear(WHITE);
+			LCD_ShowString(60,210,200,16,16, r);
+			printf("识别结果:%d%d%d%d%d", res[0], res[1], res[2], res[3], res[4]);
 			
 			//将处理后的数字发送到NB-IoT模块
 			do

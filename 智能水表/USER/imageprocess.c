@@ -438,7 +438,6 @@ u8 BP_Recongnization(const TCHAR* src)
 			maxi = i;
 		}
 	}
-	printf("%s的识别结果:%d\r\n", src, maxi);
 	//关闭文件
 	f_close(&f1);
 	f_close(&f2);
