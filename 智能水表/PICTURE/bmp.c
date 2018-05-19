@@ -380,13 +380,3 @@ void printfBmpInfo(BITMAPINFOHEADER bmpInfo)
 	printf("像素数据的压缩类型：%d\r\n", bmpInfo.biCompression);
 	printf("位图像素数据所占的字节数：%d\r\n", bmpInfo.biSizeImage);	
 }
-
-
-
-
-
-
-
-
-
-

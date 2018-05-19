@@ -174,7 +174,7 @@ int main(void)
 	while(OV7725_Init() != 0);				//初始化OV7725摄像头
 	
 	POINT_COLOR = RED;
-	LCD_ShowString(60,210,200,16,16,"OV7725 Init OK");
+	LCD_ShowString(60,210,200,16,16,"OV7725 Init OK!");
 	//特效
   OV7725_Light_Mode(lightmode);
 	OV7725_Color_Saturation(saturation);
@@ -208,7 +208,7 @@ int main(void)
 		if(KEY_Scan(1) == S3)
 		{
 			LCD_Clear(WHITE);
-			LCD_ShowString(60,210,200,16,16,"Graying......");
+			LCD_ShowString(60,210,200,16,16,"Graying...");
 			
 			//图像灰度化
 			Graying("0:test1.bmp", "0:test2.bmp");
@@ -220,7 +220,7 @@ int main(void)
 			LCD_Clear(BLACK);//清屏之后可以防止出现割屏现象
 
 			LCD_Clear(WHITE);
-			LCD_ShowString(60,210,200,16,16,"Ostu......");
+			LCD_ShowString(60,210,200,16,16,"Ostu...");
 			
 			//图像二值化
 			Ostu("0:test2.bmp", "0:test3.bmp");
@@ -234,7 +234,7 @@ int main(void)
 			//...
 			
 			LCD_Clear(WHITE);
-			LCD_ShowString(60,210,200,16,16,"Image Recognition......");
+			LCD_ShowString(60,210,200,16,16,"Image Recognition...");
 			//图像识别
 			res[0] = BP_Recongnization("0:PICS/0.bmp");
 			res[1] = BP_Recongnization("0:PICS/1.bmp");
@@ -252,7 +252,14 @@ int main(void)
 			LCD_Clear(WHITE);
 			LCD_ShowString(60,210,200,16,16, r);
 			printf("识别结果:%d%d%d%d%d", res[0], res[1], res[2], res[3], res[4]);
+			delay_ms(5000);
 			
+			continue;
+		}
+
+		//按下S4发送AT指令到NB模块
+		if(KEY_Scan(1) == S4)
+		{
 			//将处理后的数字发送到NB-IoT模块
 			do
 			{
@@ -283,16 +290,6 @@ int main(void)
 				}
 			}while(flag == 0);
 			
-			continue;
-		}
-
-		//按下S4显示图片处理结果
-		if(KEY_Scan(1) == S4)
-		{
-			LCD_Clear(BLACK);
-			ai_load_picfile("0:test3.bmp",0,0,lcddev.width,lcddev.height,1);//显示图片
-			delay_ms(5000);
-			LCD_Clear(BLACK);//清屏之后可以防止出现割屏现象
 			continue;
 		}
 		
