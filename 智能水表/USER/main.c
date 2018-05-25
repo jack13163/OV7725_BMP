@@ -23,6 +23,8 @@ FRESULT res_sd;//文件操作结果
 FIL fnew; //文件
 UINT fnum; //文件成功读写数量
 
+int x1, x2, y1, y2;//窗口区域
+
 //更新LCD显示
 void camera_refresh(void)
 {
@@ -117,6 +119,16 @@ void camera_refresh(void)
 		{
 			for(j=0;j<320;j++)
 			{
+				if((i == x1 && j > y1 && j < y2) || (i == x2 && j > y1 && j < y2) || (j == y1 && i > x1 && i < x2) || (j == y2 && i > x1 && i < x2))
+				{
+					OV7725_RCK_L;
+					OV7725_RCK_H; 
+					OV7725_RCK_L;
+					OV7725_RCK_H; 
+					LCD->LCD_RAM=0xF800; 
+				}
+				else
+				{
 				OV7725_RCK_L;
 				color=GPIOC->IDR&0XFF;	//读数据
 				OV7725_RCK_H; 
@@ -125,6 +137,7 @@ void camera_refresh(void)
 				color|=GPIOC->IDR&0XFF;	//读数据
 				OV7725_RCK_H; 
 				LCD->LCD_RAM=color; 
+				}
 			}
 		}
 		ov_sta=0;					//开始下一次采集
@@ -133,7 +146,7 @@ void camera_refresh(void)
 }
 
 //通过串口2发送AT指令给NB-IoT模块
-void SendData()
+void SendData(u16 sdata)
 {
 	int i = 0;
 	char t[50];
@@ -148,15 +161,15 @@ void SendData()
 	}
 	
 	//准备数据
-	data[0] = 0x01;
-	data[1] = 0x46;
-	data[2] = 0x00;
+	data[0] = 0x01;//从设备地址
+	data[1] = 0x46;//寄存器单元类型
+	data[2] = 0x00;//寄存器单元长度
 	data[3] = 0x00;
 	data[4] = 0x00;
 	data[5] = 0x01;
-	data[6] = 0x02;
-	data[7] = 0x00;//数据
-	data[8] = 0x64;
+	data[6] = 0x02;//数据长度
+	data[7] = (u8)((sdata & 0xFF00)>> 8);//数据
+	data[8] = (u8)(sdata & 0x00FF);
 	
 	//获取字节数据的字符串形式
 	getString(data, 9, datastr);
@@ -171,6 +184,112 @@ void SendData()
 	
 	//发送
 	Usart_SendString(USART2, t);
+}
+
+//发送AT指令,发送成功返回1，发送失败返回-1
+int sendATCmd(char * cmd)
+{
+	int j = 0, flag = 0;
+	do
+	{
+		Usart_SendString(USART2, cmd);
+		//等待接收成功后回应的结果
+		delay_ms(3000);
+		printf("send status:");
+		//判断是否发送成功
+		while(j < USART2_RX_STA)
+		{
+			printf("%c", USART2_RX_BUF[j]);
+			if((USART2_RX_BUF[j-1] == 'O' || USART2_RX_BUF[j-1] == 'o') && (USART2_RX_BUF[j] == 'K' || USART2_RX_BUF[j] == 'k'))
+			{
+				flag = 1;//发送成功
+				USART2_RX_STA = 0;
+				j = 0;
+				break;
+			}
+			if(((USART2_RX_BUF[j-1] == 'O' || USART2_RX_BUF[j-1] == 'o') && (USART2_RX_BUF[j] == 'R' || USART2_RX_BUF[j] == 'r')))
+			{
+				flag = -1;//发送失败
+				USART2_RX_STA = 0;
+				j = 0;
+				break;
+			}
+			j++;
+		}
+		
+		printf("\r\n");
+	}while(flag == 0);
+	return flag;
+}
+
+//进入临时指令模式
+void IntoTempCmdMode()
+{
+	int j = 0, flag = 0;
+	
+	//确保退出临时指令模式
+	while(sendATCmd("AT+ENTM\r\n") == 1);
+	
+	do
+	{
+		Usart_SendString(USART2, "+++");
+		delay_ms(1000);
+		
+		//判断是否发送成功
+		while(j < USART2_RX_STA)
+		{
+			if(USART2_RX_BUF[j] == 'a')
+			{
+				USART2_RX_STA = 0;
+				j = 0;
+				break;
+			}
+			j++;
+		}
+		
+		Usart_SendString(USART2, "a");
+		delay_ms(1000);
+		//判断是否发送成功
+		while(j < USART2_RX_STA)
+		{
+			if((USART2_RX_BUF[j-1] == 'O' || USART2_RX_BUF[j-1] == 'o') && (USART2_RX_BUF[j] == 'K' || USART2_RX_BUF[j] == 'k'))
+			{
+				flag = 1;//发送成功
+				USART2_RX_STA = 0;
+				j = 0;
+				break;
+			}
+			j++;
+		}
+	}while(flag == 0);
+	printf("NB模块进入临时指令模式...\r\n");
+}
+
+/*
+NB-IoT模块接收到并解析AT指令后将数据发送到服务器。
+当设备无法正确发送数据时，需要通过AT+Z指令将设备重新启动。
+需要注意的是，所有的AT指令都需要进入指令模式才可以被识别运行。
+设备从CoAP模式切换到临时指令模式的时序为：
+1．	向设备发送“+++”，模块接收到后会回复一个“a”；
+2．	在3秒之内再向模块发送一个‘a’；
+3．	模块接收到后，回复“+ok”，代表已经进入临时指令模式。
+*/
+void NB_Init()
+{
+	int i = 0;
+	//进入临时指令模式
+	IntoTempCmdMode();
+	
+	//重启
+	while(sendATCmd("AT+Z\r\n") == -1);
+	
+//	//等待重启完成
+//	while(i < 30)
+//	{
+//		delay_ms(1000);//这里需要注意延时函数延时的上限
+//		i++;
+//	}
+	printf("NB模块重新启动成功...\r\n");
 }
 
 int main(void)
@@ -194,7 +313,7 @@ int main(void)
 	while(OV7725_Init() != 0);				//初始化OV7725摄像头
 	
 	POINT_COLOR = RED;
-	LCD_ShowString(60,210,200,16,16,"OV7725 Init OK!");
+	LCD_ShowString(60,210,200,16,16,"System Init...");
 	//特效
   OV7725_Light_Mode(lightmode);
 	OV7725_Color_Saturation(saturation);
@@ -206,8 +325,15 @@ int main(void)
 	OV7725_Window_Set(OV7725_WINDOW_WIDTH,OV7725_WINDOW_HEIGHT,0);//QVGA模式输出
 	//输出使能
 	OV7725_CS=0;
-	
+	//NB模块初始化
+	NB_Init();
 	EXTI8_Init();				//使能定时器捕获
+	
+	//设置开窗区域
+	x1 = 20;
+	y1 = 130;
+	x2 = 220;
+	y2 = 180;
 	
 	LCD_Clear(BLACK);
 	while(1)
@@ -273,18 +399,19 @@ int main(void)
 			LCD_ShowString(60,210,200,16,16, r);
 			printf("识别结果:%d%d%d%d%d", r1[0], r1[1], r1[2], r1[3], r1[4]);
 			delay_ms(5000);
+			LCD_Clear(WHITE);//防止割屏现象的发生
 			
 			continue;
 		}
 
-		//按下S4发送AT指令到NB模块
+		//按下S4发送AT指令到NB模块(NB模块每次非正常断电都需要通过重启来使设备初始化，同时重启的时间长度大概是30秒)
 		if(KEY_Scan(1) == S4)
 		{
 			//将处理后的数字发送到NB-IoT模块
 			do
 			{
-				//发送AT指令（需要提前进入临时AT指令模式）
-				SendData();
+				//发送AT指令
+				SendData(12);
 				
 				//等待接收成功后回应的结果
 				delay_ms(3000);
