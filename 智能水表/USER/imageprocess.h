@@ -14,14 +14,14 @@
  */
 void Graying(const TCHAR* src, const TCHAR* dist);
 
-//ostu二值化算法
+//Otsu二值化算法
 /*
  * 思路：定义两个文件指针，
  * 第一个文件指针用于读取原图像中的像素值，
  * 第二个用来指向待写入的文件
  * f3:数据文件
  */
-void Ostu(const TCHAR* src, const TCHAR* dist);
+void Otsu(const TCHAR* src, const TCHAR* dist);
 
 /* BP神经网络识别数字
  * 思路：已知权值矩阵w、v，以及阀值矩阵b1、b2

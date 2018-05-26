@@ -35,7 +35,7 @@ void Graying(const TCHAR* src, const TCHAR* dist)
 	do
 	{
 		res1 = f_open(&f1, src, FA_READ | FA_WRITE);
-		res2 = f_open(&f2, dist, FA_READ | FA_WRITE);
+		res2 = f_open(&f2, dist, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
 	}while((FR_OK != res1) || (FR_OK != res2));
 	
 	f_read(&f1, &bmp, sizeof(bmp), &num);
@@ -62,14 +62,14 @@ void Graying(const TCHAR* src, const TCHAR* dist)
 	f_close(&f1);
 }
 
-//ostu二值化算法
+//Otsu二值化算法
 /*
  * 思路：定义两个文件指针，
  * 第一个文件指针用于读取原图像中的像素值，
  * 第二个用来指向待写入的文件
  * f3:数据文件
  */
-void Ostu(const TCHAR* src, const TCHAR* dist)
+void Otsu(const TCHAR* src, const TCHAR* dist)
 {
 	UINT num = 0;
 	u32 i,j;

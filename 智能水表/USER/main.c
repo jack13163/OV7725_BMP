@@ -23,20 +23,26 @@ FRESULT res_sd;//文件操作结果
 FIL fnew; //文件
 UINT fnum; //文件成功读写数量
 
-int x1, x2, y1, y2;//窗口区域
+u16 x1 = 130;
+u16 y1 = 20;
+u16 x2 = 180;
+u16 y2 = 220;//窗口区域
 
 //更新LCD显示
 void camera_refresh(void)
 {
-	u32 i,j;
+	u16 i,j;
  	u16 color;
 	BITMAPINFO bmp;
 	
 	//按下S1拍摄图片
 	if(ov_sta && KEY_Scan(1) == S1)
 	{
+		LCD_Scan_Dir(U2D_L2R);		//从上到下,从左到右 
+		LCD_WriteRAM_Prepare();   //开始写入GRAM	
+		
 		//打开文件，若不存在就创建
-		res_sd = f_open(&fnew, "0:test1.bmp", FA_OPEN_ALWAYS | FA_WRITE);
+		res_sd = f_open(&fnew, "0:test1.bmp", FA_CREATE_ALWAYS | FA_WRITE);
 		
 		//文件打开成功
 		if(res_sd == FR_OK)
@@ -44,9 +50,9 @@ void camera_refresh(void)
 			//填写文件信息头信息  
 			bmp.bmfHeader.bfType = 0x4D42;				//bmp类型  
 			bmp.bmfHeader.bfOffBits=sizeof(bmp.bmfHeader) + sizeof(bmp.bmiHeader) + sizeof(bmp.RGB_MASK);						//位图信息结构体所占的字节数
-			bmp.bmfHeader.bfSize= bmp.bmfHeader.bfOffBits + 320*240*2;	//文件大小（信息结构体+像素数据）
+			bmp.bmfHeader.bfSize= bmp.bmfHeader.bfOffBits + 320 * 240 * 2;	//文件大小（信息结构体+像素数据）
 			bmp.bmfHeader.bfReserved1 = 0x0000;		//保留，必须为0
-			bmp.bmfHeader.bfReserved2 = 0x0000;  			
+			bmp.bmfHeader.bfReserved2 = 0x0000;
 			
 			//填写位图信息头信息  
 			bmp.bmiHeader.biSize=sizeof(bmp.bmiHeader);  				    //位图信息头的大小
@@ -55,7 +61,7 @@ void camera_refresh(void)
 			bmp.bmiHeader.biPlanes=1;  				    //目标设别的级别，必须是1
 			bmp.bmiHeader.biBitCount=16;          //每像素位数
 			bmp.bmiHeader.biCompression=3;  	    //每个象素的比特由指定的掩码（RGB565掩码）决定。  (非常重要)
-			bmp.bmiHeader.biSizeImage=320*240*2;  //实际位图所占用的字节数（仅考虑位图像素数据）
+			bmp.bmiHeader.biSizeImage=320 * 240 * 2;  //实际位图所占用的字节数（仅考虑位图像素数据）
 			bmp.bmiHeader.biXPelsPerMeter=0;			//水平分辨率
 			bmp.bmiHeader.biYPelsPerMeter=0; 			//垂直分辨率
 			bmp.bmiHeader.biClrImportant=0;   	  //说明图像显示有重要影响的颜色索引数目，0代表所有的颜色一样重要
@@ -66,9 +72,12 @@ void camera_refresh(void)
 			bmp.RGB_MASK[1] = 0X0007E0;
 			bmp.RGB_MASK[2] = 0X00001F;
 			
+			printfBmpFileInfo(bmp.bmfHeader);
+			printfBmpInfo(bmp.bmiHeader);
+			
 			//写文件头进文件  
-			res_sd= f_write(&fnew, &bmp, sizeof(bmp), &fnum);
-		
+			res_sd = f_write(&fnew, &bmp, sizeof(bmp), &fnum);
+			
 			//读指针复位
 			OV7725_RRST=0;				//开始复位读指针
 			OV7725_RCK_L;
@@ -81,7 +90,7 @@ void camera_refresh(void)
 			for(i=0;i<240;i++)
 			{
 				for(j=0;j<320;j++)
-				{
+				{		
 					OV7725_RCK_L;
 					color=GPIOC->IDR&0XFF;	//读数据
 					OV7725_RCK_H; 
@@ -90,14 +99,30 @@ void camera_refresh(void)
 					color|=GPIOC->IDR&0XFF;	//读数据
 					OV7725_RCK_H; 
 					
-					//写位图信息头进内存卡
-					f_write(&fnew, &color, sizeof(color), &fnum);
+					if((i > y1 && i < y2) && (j > x1 && j < x2))
+					{
+						//写位图信息头进内存卡
+						f_write(&fnew, &color, sizeof(color), &fnum);
+						
+						LCD->LCD_RAM=color;
+					}
+					else
+					{
+						color = 0xFFFF;
+						
+						//写位图信息头进内存卡
+						f_write(&fnew, &color, sizeof(color), &fnum);
+						
+						LCD->LCD_RAM=color;
+					}
 				}
 			}
 		}
-				
 		//关闭文件
 		f_close(&fnew);
+		delay_ms(3000);
+		ov_sta=0;					//开始下一次采集
+		LCD_Scan_Dir(DFT_SCAN_DIR);	//恢复默认扫描方向 
 	}
 	
 	//没有按键按下，刷新LCD
@@ -119,7 +144,7 @@ void camera_refresh(void)
 		{
 			for(j=0;j<320;j++)
 			{
-				if((i == x1 && j > y1 && j < y2) || (i == x2 && j > y1 && j < y2) || (j == y1 && i > x1 && i < x2) || (j == y2 && i > x1 && i < x2))
+				if((i == y1 && j > x1 && j < x2) || (i == y2 && j > x1 && j < x2) || (j == x1 && i > y1 && i < y2) || (j == x2 && i > y1 && i < y2))
 				{
 					OV7725_RCK_L;
 					OV7725_RCK_H; 
@@ -129,14 +154,14 @@ void camera_refresh(void)
 				}
 				else
 				{
-				OV7725_RCK_L;
-				color=GPIOC->IDR&0XFF;	//读数据
-				OV7725_RCK_H; 
-				color<<=8;  
-				OV7725_RCK_L;
-				color|=GPIOC->IDR&0XFF;	//读数据
-				OV7725_RCK_H; 
-				LCD->LCD_RAM=color; 
+					OV7725_RCK_L;
+					color=GPIOC->IDR&0XFF;	//读数据
+					OV7725_RCK_H; 
+					color<<=8;  
+					OV7725_RCK_L;
+					color|=GPIOC->IDR&0XFF;	//读数据
+					OV7725_RCK_H; 
+					LCD->LCD_RAM=color; 
 				}
 			}
 		}
@@ -283,19 +308,13 @@ void NB_Init()
 	//重启
 	while(sendATCmd("AT+Z\r\n") == -1);
 	
-//	//等待重启完成
-//	while(i < 30)
-//	{
-//		delay_ms(1000);//这里需要注意延时函数延时的上限
-//		i++;
-//	}
 	printf("NB模块重新启动成功...\r\n");
 }
 
 int main(void)
 {
 	u8 lightmode=0,saturation=2,brightness=2,contrast=2,effect=0;
-	u8 i = 0, j = 0;
+	u8 i = 0, j = 0, k  = 0;
 	int r1[5];//识别结果
 	char r[6];
 	u8 flag = 0;
@@ -329,15 +348,10 @@ int main(void)
 	NB_Init();
 	EXTI8_Init();				//使能定时器捕获
 	
-	//设置开窗区域
-	x1 = 20;
-	y1 = 130;
-	x2 = 220;
-	y2 = 180;
-	
 	LCD_Clear(BLACK);
 	while(1)
 	{
+		k = 0;
 		camera_refresh();//更新显示
 		
 		//按下S2显示图片
@@ -353,28 +367,14 @@ int main(void)
 		//按下S3图片处理
 		if(KEY_Scan(1) == S3)
 		{
+			//图像灰度化
 			LCD_Clear(WHITE);
 			LCD_ShowString(60,210,200,16,16,"Graying...");
-			
-			//图像灰度化
 			Graying("0:test1.bmp", "0:test2.bmp");
-			
 			//显示图像处理结果
 			LCD_Clear(BLACK);
 			ai_load_picfile("0:test2.bmp",0,0,lcddev.width,lcddev.height,1);//显示图片
 			delay_ms(5000);
-			LCD_Clear(BLACK);//清屏之后可以防止出现割屏现象
-
-			LCD_Clear(WHITE);
-			LCD_ShowString(60,210,200,16,16,"Ostu...");
-			
-			//图像二值化
-			Ostu("0:test2.bmp", "0:test3.bmp");
-			//显示图像处理结果
-			LCD_Clear(BLACK);
-			ai_load_picfile("0:test3.bmp",0,0,lcddev.width,lcddev.height,1);//显示图片
-			delay_ms(5000);
-			LCD_Clear(BLACK);//清屏之后可以防止出现割屏现象
 			
 			//图像分割(图片文件夹的路径为0:PICS/)
 			//...
@@ -398,7 +398,12 @@ int main(void)
 			LCD_Clear(WHITE);
 			LCD_ShowString(60,210,200,16,16, r);
 			printf("识别结果:%d%d%d%d%d", r1[0], r1[1], r1[2], r1[3], r1[4]);
-			delay_ms(5000);
+			//延时一分钟
+			while(k < 20)
+			{
+				delay_ms(3000);
+				k++;
+			}
 			LCD_Clear(WHITE);//防止割屏现象的发生
 			
 			continue;
