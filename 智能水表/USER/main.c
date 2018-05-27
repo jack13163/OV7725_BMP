@@ -9,6 +9,7 @@
 #include "led.h"
 #include "imageprocess.h"
 #include "string.h"
+#include "nbiot.h"
 
 extern u8 ov_sta;	//在exit.c里面定义
 extern u16 USART2_RX_STA;//在usart.c中定义
@@ -28,12 +29,16 @@ u16 y1 = 20;
 u16 x2 = 180;
 u16 y2 = 220;//窗口区域
 
+//图像识别结果
+u16  rec_result = 0;
+
 //更新LCD显示
 void camera_refresh(void)
 {
 	u16 i,j;
  	u16 color;
 	BITMAPINFO bmp;
+	u16 cut_width = 320, cut_height = 240;
 	
 	//按下S1拍摄图片
 	if(ov_sta && KEY_Scan(1) == S1)
@@ -42,26 +47,26 @@ void camera_refresh(void)
 		LCD_WriteRAM_Prepare();   //开始写入GRAM	
 		
 		//打开文件，若不存在就创建
-		res_sd = f_open(&fnew, "0:test1.bmp", FA_CREATE_ALWAYS | FA_WRITE);
+		res_sd = f_open(&fnew, "0:test1.bmp", FA_OPEN_ALWAYS | FA_WRITE);
 		
 		//文件打开成功
 		if(res_sd == FR_OK)
 		{
-			//填写文件信息头信息  
+			//填写文件信息头信息
 			bmp.bmfHeader.bfType = 0x4D42;				//bmp类型  
 			bmp.bmfHeader.bfOffBits=sizeof(bmp.bmfHeader) + sizeof(bmp.bmiHeader) + sizeof(bmp.RGB_MASK);						//位图信息结构体所占的字节数
-			bmp.bmfHeader.bfSize= bmp.bmfHeader.bfOffBits + 320 * 240 * 2;	//文件大小（信息结构体+像素数据）
+			bmp.bmfHeader.bfSize= bmp.bmfHeader.bfOffBits + cut_width * cut_height * 2;	//文件大小（信息结构体+像素数据）
 			bmp.bmfHeader.bfReserved1 = 0x0000;		//保留，必须为0
 			bmp.bmfHeader.bfReserved2 = 0x0000;
 			
 			//填写位图信息头信息  
 			bmp.bmiHeader.biSize=sizeof(bmp.bmiHeader);  				    //位图信息头的大小
-			bmp.bmiHeader.biWidth=320;  														//位图的宽度
-			bmp.bmiHeader.biHeight=240;  			    //图像的高度
+			bmp.bmiHeader.biWidth=cut_width;  														//位图的宽度
+			bmp.bmiHeader.biHeight=cut_height;  			    //图像的高度
 			bmp.bmiHeader.biPlanes=1;  				    //目标设别的级别，必须是1
 			bmp.bmiHeader.biBitCount=16;          //每像素位数
 			bmp.bmiHeader.biCompression=3;  	    //每个象素的比特由指定的掩码（RGB565掩码）决定。  (非常重要)
-			bmp.bmiHeader.biSizeImage=320 * 240 * 2;  //实际位图所占用的字节数（仅考虑位图像素数据）
+			bmp.bmiHeader.biSizeImage=cut_width * cut_height * 2;  //实际位图所占用的字节数（仅考虑位图像素数据）
 			bmp.bmiHeader.biXPelsPerMeter=0;			//水平分辨率
 			bmp.bmiHeader.biYPelsPerMeter=0; 			//垂直分辨率
 			bmp.bmiHeader.biClrImportant=0;   	  //说明图像显示有重要影响的颜色索引数目，0代表所有的颜色一样重要
@@ -90,7 +95,7 @@ void camera_refresh(void)
 			for(i=0;i<240;i++)
 			{
 				for(j=0;j<320;j++)
-				{		
+				{
 					OV7725_RCK_L;
 					color=GPIOC->IDR&0XFF;	//读数据
 					OV7725_RCK_H; 
@@ -109,7 +114,6 @@ void camera_refresh(void)
 					else
 					{
 						color = 0xFFFF;
-						
 						//写位图信息头进内存卡
 						f_write(&fnew, &color, sizeof(color), &fnum);
 						
@@ -170,153 +174,11 @@ void camera_refresh(void)
 	}
 }
 
-//通过串口2发送AT指令给NB-IoT模块
-void SendData(u16 sdata)
-{
-	int i = 0;
-	char t[50];
-	char data[10];
-	char datastr[21];
-	char res[5];
-	
-	//初始化t
-	for(i = 0; i < 50; i++)
-	{
-		t[i] = '\0';
-	}
-	
-	//准备数据
-	data[0] = 0x01;//从设备地址
-	data[1] = 0x46;//寄存器单元类型
-	data[2] = 0x00;//寄存器单元长度
-	data[3] = 0x00;
-	data[4] = 0x00;
-	data[5] = 0x01;
-	data[6] = 0x02;//数据长度
-	data[7] = (u8)((sdata & 0xFF00)>> 8);//数据
-	data[8] = (u8)(sdata & 0x00FF);
-	
-	//获取字节数据的字符串形式
-	getString(data, 9, datastr);
-	//获取字节数据的crc16校验码
-	getCrc16(data, 9, res);
-	
-	//字符串拼接
-	strcpy(t, "AT+NMGS=11,");
-	strcat(t, datastr);
-	strcat(t, res);
-	strcat(t, "\r\n");
-	
-	//发送
-	Usart_SendString(USART2, t);
-}
-
-//发送AT指令,发送成功返回1，发送失败返回-1
-int sendATCmd(char * cmd)
-{
-	int j = 0, flag = 0;
-	do
-	{
-		Usart_SendString(USART2, cmd);
-		//等待接收成功后回应的结果
-		delay_ms(3000);
-		printf("send status:");
-		//判断是否发送成功
-		while(j < USART2_RX_STA)
-		{
-			printf("%c", USART2_RX_BUF[j]);
-			if((USART2_RX_BUF[j-1] == 'O' || USART2_RX_BUF[j-1] == 'o') && (USART2_RX_BUF[j] == 'K' || USART2_RX_BUF[j] == 'k'))
-			{
-				flag = 1;//发送成功
-				USART2_RX_STA = 0;
-				j = 0;
-				break;
-			}
-			if(((USART2_RX_BUF[j-1] == 'O' || USART2_RX_BUF[j-1] == 'o') && (USART2_RX_BUF[j] == 'R' || USART2_RX_BUF[j] == 'r')))
-			{
-				flag = -1;//发送失败
-				USART2_RX_STA = 0;
-				j = 0;
-				break;
-			}
-			j++;
-		}
-		
-		printf("\r\n");
-	}while(flag == 0);
-	return flag;
-}
-
-//进入临时指令模式
-void IntoTempCmdMode()
-{
-	int j = 0, flag = 0;
-	
-	//确保退出临时指令模式
-	while(sendATCmd("AT+ENTM\r\n") == 1);
-	
-	do
-	{
-		Usart_SendString(USART2, "+++");
-		delay_ms(1000);
-		
-		//判断是否发送成功
-		while(j < USART2_RX_STA)
-		{
-			if(USART2_RX_BUF[j] == 'a')
-			{
-				USART2_RX_STA = 0;
-				j = 0;
-				break;
-			}
-			j++;
-		}
-		
-		Usart_SendString(USART2, "a");
-		delay_ms(1000);
-		//判断是否发送成功
-		while(j < USART2_RX_STA)
-		{
-			if((USART2_RX_BUF[j-1] == 'O' || USART2_RX_BUF[j-1] == 'o') && (USART2_RX_BUF[j] == 'K' || USART2_RX_BUF[j] == 'k'))
-			{
-				flag = 1;//发送成功
-				USART2_RX_STA = 0;
-				j = 0;
-				break;
-			}
-			j++;
-		}
-	}while(flag == 0);
-	printf("NB模块进入临时指令模式...\r\n");
-}
-
-/*
-NB-IoT模块接收到并解析AT指令后将数据发送到服务器。
-当设备无法正确发送数据时，需要通过AT+Z指令将设备重新启动。
-需要注意的是，所有的AT指令都需要进入指令模式才可以被识别运行。
-设备从CoAP模式切换到临时指令模式的时序为：
-1．	向设备发送“+++”，模块接收到后会回复一个“a”；
-2．	在3秒之内再向模块发送一个‘a’；
-3．	模块接收到后，回复“+ok”，代表已经进入临时指令模式。
-*/
-void NB_Init()
-{
-	int i = 0;
-	//进入临时指令模式
-	IntoTempCmdMode();
-	
-	//重启
-	while(sendATCmd("AT+Z\r\n") == -1);
-	
-	printf("NB模块重新启动成功...\r\n");
-}
-
 int main(void)
 {
 	u8 lightmode=0,saturation=2,brightness=2,contrast=2,effect=0;
 	u8 i = 0, j = 0, k  = 0;
 	int r1[5];//识别结果
-	char r[6];
 	u8 flag = 0;
 	
 	delay_init();	    	//延时函数初始化	  
@@ -332,7 +194,7 @@ int main(void)
 	while(OV7725_Init() != 0);				//初始化OV7725摄像头
 	
 	POINT_COLOR = RED;
-	LCD_ShowString(60,210,200,16,16,"System Init...");
+	LCD_ShowString(60,210,200,16,16, (u8*)"System Init...");
 	//特效
   OV7725_Light_Mode(lightmode);
 	OV7725_Color_Saturation(saturation);
@@ -358,7 +220,7 @@ int main(void)
 		if(KEY_Scan(1) == S2)
 		{
 			LCD_Clear(BLACK);
-			ai_load_picfile("0:test1.bmp",0,0,lcddev.width,lcddev.height,1);//显示图片
+			ai_load_picfile((u8*)"0:test1.bmp",0,0,lcddev.width,lcddev.height,1);//显示图片
 			delay_ms(5000);
 			LCD_Clear(BLACK);//清屏之后可以防止出现割屏现象
 			continue;
@@ -369,41 +231,28 @@ int main(void)
 		{
 			//图像灰度化
 			LCD_Clear(WHITE);
-			LCD_ShowString(60,210,200,16,16,"Graying...");
+			LCD_ShowString(60,210,200,16,16,(u8*)"Graying...");
 			Graying("0:test1.bmp", "0:test2.bmp");
 			//显示图像处理结果
 			LCD_Clear(BLACK);
-			ai_load_picfile("0:test2.bmp",0,0,lcddev.width,lcddev.height,1);//显示图片
+			ai_load_picfile((u8*)"0:test2.bmp",0,0,lcddev.width,lcddev.height,1);//显示图片
 			delay_ms(5000);
 			
-			//图像分割(图片文件夹的路径为0:PICS/)
+			//图像分割(图片文件夹的路径为0:PICS/，由低位到高位依次是0.bmp、1.bmp、2.bmp、3.bmp和4.bmp)
 			//...
 			
 			LCD_Clear(WHITE);
-			LCD_ShowString(60,210,200,16,16,"Image Recognition...");
-			//图像识别
+			LCD_ShowString(60,210,200,16,16,(u8*)"Image Recognition...");
+			//图像识别(由低位到高位)
 			r1[0] = BP_Recongnization("0:PICS/0.bmp");
 			r1[1] = BP_Recongnization("0:PICS/1.bmp");
 			r1[2] = BP_Recongnization("0:PICS/2.bmp");
 			r1[3] = BP_Recongnization("0:PICS/3.bmp");
 			r1[4] = BP_Recongnization("0:PICS/4.bmp");
 			
-			r[0] = r1[0] + '0';
-			r[1] = r1[1] + '0';
-			r[2] = r1[2] + '0';
-			r[3] = r1[3] + '0';
-			r[4] = r1[4] + '0';
-			r[5] = '\0';
+			rec_result = r1[0] + r1[1] * 10 + r1[2] * 100 + r1[3] * 1000 + r1[4] * 10000;
 			//输出识别结果
-			LCD_Clear(WHITE);
-			LCD_ShowString(60,210,200,16,16, r);
-			printf("识别结果:%d%d%d%d%d", r1[0], r1[1], r1[2], r1[3], r1[4]);
-			//延时一分钟
-			while(k < 20)
-			{
-				delay_ms(3000);
-				k++;
-			}
+			printf("识别结果:%d\r\n", rec_result);
 			LCD_Clear(WHITE);//防止割屏现象的发生
 			
 			continue;
@@ -416,7 +265,7 @@ int main(void)
 			do
 			{
 				//发送AT指令
-				SendData(12);
+				SendData(rec_result);
 				
 				//等待接收成功后回应的结果
 				delay_ms(3000);

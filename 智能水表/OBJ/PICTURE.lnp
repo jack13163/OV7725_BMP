@@ -5,6 +5,7 @@
 "..\obj\exti_1.o"
 "..\obj\imageprocess.o"
 "..\obj\crc16.o"
+"..\obj\nbiot.o"
 "..\obj\led.o"
 "..\obj\key.o"
 "..\obj\lcd.o"
